@@ -1,0 +1,28 @@
+{% extends "basetemplate.html" %}
+{% block title %}
+  Alla Kunder 
+{% endblock %}
+
+{% block content %}
+    <table>
+    {% for c in customers  %}
+        <tr>
+            <td>
+                {{c.GivenName}}
+            </td>
+            <td>
+                {{c.Surname}}
+            </td>
+            <td>
+                {{c.City}}
+            </td>
+            <td>
+                <a href="/customer/{{c.Id}}" class="btn">More info</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
+
+
+

@@ -1,0 +1,21 @@
+{% extends "basetemplate.html" %}
+
+{% block title %}
+home
+{% endblock %}
+
+
+{% block account %}
+{{accounts}}
+{% endblock %}
+
+{% block customer %}
+{{number_of_customers}}
+{% endblock %}
+
+{% block belopp %}
+    {% for a in accounts %}
+        belopp = a.Balance
+        {{belopp}}
+    {%endfor%}
+{% endblock %}

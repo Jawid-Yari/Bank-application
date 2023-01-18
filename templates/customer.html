@@ -1,0 +1,29 @@
+{% extends "basetemplate.html" %}
+{% block title %}
+Kundsida {{ customer.Surname}}, {{ customer.GivenName}}
+{% endblock %}
+
+{% block content %}
+
+<h1> {{ customer.Surname}}, {{ customer.GivenName}}</h1>
+<p>Kunden bor i {{customer.City}} </p>
+    <table>
+    {% for c in customers  %}
+        <tr>
+            <td>
+                {{c.GivenName}}
+            </td>
+            <td>
+                {{c.Surname}}
+            </td>
+            <td>
+                {{c.City}}
+            </td>
+            <td>
+                <a href="" class="btn">More info</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
+
