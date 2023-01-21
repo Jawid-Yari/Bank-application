@@ -1,28 +1,57 @@
-{% extends "basetemplate.html" %}
+{% extends "index.html" %}
+
 {% block title %}
-  Alla Kunder 
+  Customer page 
 {% endblock %}
 
-{% block content %}
-    <table>
-    {% for c in customers  %}
-        <tr>
-            <td>
-                {{c.GivenName}}
-            </td>
-            <td>
-                {{c.Surname}}
-            </td>
-            <td>
-                {{c.City}}
-            </td>
-            <td>
-                <a href="/customer/{{c.Id}}" class="btn">More info</a>
-            </td>
-        </tr>
-    {% endfor %}
-    </table>
+{% block main %}
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">All Customers</h4>
+            <div class="data-tables datatable-dark">
+                <div id="dataTable3_wrapper">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                           <div class="dataTables_length" id="dataTable3_length">
+                    
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="text-center dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="dataTable3_info" style="width: 1300px;">
+                            <thead class="text-capitalize">
+                                <tr role="row">
+                                    <th style="width: 200px;"  >ID</th>
+                                    <th style="width: 200px;" >Name</th>
+                                    <th style="width: 200px;">Given Name</th>
+                                    <th style="width: 200px;">Country</th>
+                                    <th style="width: 200px;" >Profile</th>
+                                    <th style="width: 200px;">Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for c in customers  %}
+                                <tr>
+                                        <td >{{c.Id}}</td>
+                                        <td >{{c.Surname}}</td>
+                                        <td >{{c.GivenName}}</td>
+                                        <td >{{c.Country}}</td>
+                                        <td >{{c.City}}</td>
+
+                                        <td>
+                                            <a href="/customer/{{c.Id}}" class="btn">More info</a>
+                                        </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
-
-
-

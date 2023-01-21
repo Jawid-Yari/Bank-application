@@ -20,12 +20,17 @@ migrate = Migrate(app,db)
 
 @app.route("/")
 def home():
-    customers = Customer.query.count()
-    accounts = Account.query.all()
+    account = Account.query.filter(Account.Balance)
+    balance = 0
+    for a in account:
+        balance +=a.Balance
+
     return render_template("home.html",
-                            customers = customers,
+                            number_of_accounts= Account.query.count(),
                             number_of_customers = Customer.query.count(),
-                            accounts = accounts
+                            total_balance = balance,
+                            redirect="/",
+                            activePage = "home_page"
                             )
     
 
@@ -34,9 +39,17 @@ def home():
 @app.route("/customers")
 def customers():
     customers = Customer.query.all()
+    accounts = Account.query.all()
+    # for a in accounts:
+    #     if 
+    # balance = Account.query.filter_by(CustomerId=customers.Id)
+    # current_balance =0
+
     return render_template("customers.html",
                             customers = customers,
-                            redirect= "customres")
+                            redirect= "customres",
+                            activePage="customers_page"
+                            )
 
 @app.route("/customer/<id>")
 def customer(id):
