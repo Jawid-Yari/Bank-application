@@ -2160,8 +2160,9 @@ table.dataTable thead td {
 /* datatable-dark */
 
 .datatable-dark thead {
-    background: #444;
+    background: #303641;
     color: #fff;
+    height: 40px;
 }
 
 .datatable-dark .dataTables_paginate .page-item.active .page-link,
