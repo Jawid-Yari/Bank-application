@@ -44,6 +44,7 @@ def customers():
     #     if 
     # balance = Account.query.filter_by(CustomerId=customers.Id)
     # current_balance =0
+    
 
     return render_template("customers.html",
                             customers = customers,

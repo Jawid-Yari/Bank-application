@@ -582,6 +582,11 @@
         <script src="{{ url_for('static',filename='assets/js/plugins.js')}}"></script>
         <script src="{{ url_for('static',filename='assets/js/scripts.js')}}"></script>
     </body>
+    <footer>
+        {% block paging %}
+        
+        {% endblock %}
+    </footer>
     
     </html>
 

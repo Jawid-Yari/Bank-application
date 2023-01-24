@@ -67,3 +67,21 @@
     </div>
 
 {% endblock %}
+
+{% block paging %}
+
+<div class="previous-page">
+    <ul class="pagination previous">
+        <li class="paginate_button page-item previous disabled">
+            <a href="customers.html" aria-controls="dataTable3" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+        </li>
+    </ul>
+    <ul class="pagination next">
+        <li class="paginate_button page-item previous disabled">
+            <a href="#" aria-controls="dataTable3" data-dt-idx="0" tabindex="0" class="page-link">Next</a>
+        </li>
+    </ul>
+</div>
+
+
+{% endblock %}
