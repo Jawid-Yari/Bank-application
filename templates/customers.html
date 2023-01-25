@@ -3,48 +3,91 @@
 {% block title %}
   Customer page 
 {% endblock %}
-
+{% block search %}
+<div class="search-box pull-left">
+    <form method="get">
+        <input type="text" placeholder="customer number" value="{{q}}" name ="q" required>
+        <a href="#"><i class="ti-search"></i></a>
+    </form>
+</div>
+{% endblock %}
 {% block main %}
     <div class="card">
         <div class="card-body">
-            <h4 class="header-title">All Customers</h4>
+            
             <div class="data-tables datatable-dark">
-                <div id="dataTable3_wrapper">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6">
-                           <div class="dataTables_length" id="dataTable3_length">
-                    
-                        </div>
-                    </div>
-
-                </div>
+           
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="col-sm-12 col-md-6">
+                        <!-- <div class="col-sm-12 col-md-6">
                             <div class="dataTables_length" id="dataTable3_length">
+                                <h4 class="header-title">All Customers,</h4>
                                 <label>Show 
-                                    <select name="dataTable3_length" aria-controls="dataTable3" class="custom-select custom-select-sm form-control form-control-sm">
+                                    <select class="custom-select">
                                         <option value="10">10</option>
                                         <option value="25">25</option>
                                         <option value="50">50</option>
                                         <option value="100">100</option>
                                     </select> entries
                                 </label>
+                           
                             </div>
-                        </div>
-                        <table class="text-center dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="dataTable3_info" style="width: 1245px;">
+                        </div> -->
+                        <table class="text-center dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="dataTable3_info" style="width: 1345px;">
                             <thead class="text-capitalize">
                                 <tr role="row">
-                                    <th style="width: 200px;"  >ID</th>
-                                    <th style="width: 200px;" >Name</th>
-                                    <th style="width: 200px;">Given Name</th>
-                                    <th style="width: 200px;">Country</th>
-                                    <th style="width: 200px;" >Profile</th>
-                                    <th style="width: 200px;">Balance</th>
+                                    <th style="width: 200px;"  >ID
+                                        <a href="/customers?sortColumn=id&sortOrder=asc">
+                                            <i class="fa fa-caret-down"></i> 
+                                        </a>
+                                        <a href="/customers?sortColumn=id&sortOrder=desc">
+                                            <i class="fa fa-caret-up"></i>
+                                        </a>
+                                    </th>
+                                    <th style="width: 200px;" >Name
+                                        <a href="/customers?sortColumn=name&sortOrder=ascq={{ q }}">
+                                            <i class="fa fa-caret-down"></i>
+                                        </a>
+                                        <a href="/customers?sortColumn=name&sortOrder=descq={{ q }}">
+                                          <i class="fa fa-caret-up"></i>
+                                        </a>
+                                        </th>
+                                    <th style="width: 200px;">Given Name
+                                        <a href="/customers?sortColumn=givenName&sortOrder=ascq={{ q }}">
+                                            <i class="fa fa-caret-down"></i>
+                                        </a> 
+                                        <a href="/customers?sortColumn=givenName&sortOrder=descq={{ q }}">
+                                            <i class="fa fa-caret-up"></i>
+                                        </a>
+                                    </th>
+                                    <th style="width: 200px;">Country
+                                        <a href="/customers?sortColumn=country&sortOrder=ascq={{ q }}">
+                                            <i class="fa fa-caret-down"></i>
+                                        </a>
+                                        <a href="/customers?sortColumn=country&sortOrder=descq={{ q }}">
+                                            <i class="fa fa-caret-up"></i>
+                                        </a>
+                                    </th>
+                                    <th style="width: 200px;" >City
+                                        <a href="/customers?sortColumn=city&sortOrder=ascq={{ q }}">
+                                            <i class="fa fa-caret-down"></i>
+                                        </a>
+                                        <a href="/customers?sortColumn=city&sortOrder=descq={{ q }}">
+                                            <i class="fa fa-caret-up"></i>
+                                        </a>
+                                    </th>
+                                    <th style="width: 200px;">Balance
+                                        <a href="/customers?sortColumn=balance&sortOrder=ascq={{ q }}">
+                                            <i class="fa fa-caret-down"></i>
+                                        </a>
+                                        <a href="/customers?sortColumn=balance&sortOrder=ascq={{ q }}">
+                                         <i class="fa fa-caret-up"></i>
+                                        </a>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for c in customers  %}
+                                {% for c in list_of_customers  %}
                                 <tr>
                                         <td >{{c.Id}}</td>
                                         <td >{{c.Surname}}</td>
@@ -68,20 +111,32 @@
 
 {% endblock %}
 
-{% block paging %}
+{% block footer %}
 
-<div class="previous-page">
-    <ul class="pagination previous">
-        <li class="paginate_button page-item previous disabled">
-            <a href="customers.html" aria-controls="dataTable3" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+<div class="footer">
+
+    <ul class="pagination">
+        {% if has_prev %}
+        <li class="page-item">
+            <a class="page-link" href="/customers?page={{page -1}}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}?" aria-label="Previous">
+                <span aria-hidden="true">«</span>
+                <span class="sr-only">Previous</span>
+            </a>
         </li>
-    </ul>
-    <ul class="pagination next">
-        <li class="paginate_button page-item previous disabled">
-            <a href="#" aria-controls="dataTable3" data-dt-idx="0" tabindex="0" class="page-link">Next</a>
-        </li>
-    </ul>
+        {% endif %}
+        <li class="page-item"><a class="page-link" href="/customers">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        {% if has_next %}
+        <li class="page-item">
+            <a class="page-link" href="/customers?page={{page +1}}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}" aria-label="Next">
+                <span aria-hidden="true">»</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li> -->
+        {% endif %}
 </div>
+
 
 
 {% endblock %}

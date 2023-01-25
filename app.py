@@ -6,7 +6,7 @@ from model import db, seedData, Customer, Account
 
  
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:hej123@localhost/BankData'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:hej123@localhost/StarBank'
 db.app = app
 db.init_app(app)
 migrate = Migrate(app,db)
@@ -38,18 +38,73 @@ def home():
 
 @app.route("/customers")
 def customers():
-    customers = Customer.query.all()
     accounts = Account.query.all()
     # for a in accounts:
     #     if 
     # balance = Account.query.filter_by(CustomerId=customers.Id)
     # current_balance =0
     
+    
+    sortColumn=request.args.get('sortColumn', 'id')
+    sortOrder=request.args.get('sortOrder', 'asc')
+    list_of_customers=Customer.query
+    q = request.args.get('q', '')
+    page =int(request.args.get('page', 1))
+
+    list_of_customers = Customer.query
+    list_of_customers= list_of_customers.filter(
+         Customer.GivenName.like('%' + q + '%') |
+                                Customer.City.like('%' + q + '%')|
+                                                Customer.Surname.like('%' + q + '%')|
+                                                                    Customer.Id.like('%' + q + '%')|
+                                                                                        Customer.Country.like('%' + q + '%')|
+                                                                                                            Customer.City.like('%' + q + '%')
+                                                                                                                        
+
+    )
+    if sortColumn=='id':
+        if sortOrder =='asc':
+            list_of_customers=Customer.query.order_by(Customer.Id.asc())
+        else:
+            list_of_customers=Customer.query.order_by(Customer.Id.desc())
+
+    if sortColumn=='name':
+        if sortOrder=='asc':
+            list_of_customers=Customer.query.order_by(Customer.Surname.asc())
+        else:
+            list_of_customers=Customer.query.order_by(Customer.Surname.desc())
+        
+    if sortColumn=='givenName':
+        if sortOrder=='asc':
+            list_of_customers=Customer.query.order_by(Customer.GivenName.asc())
+        else:
+            list_of_customers=Customer.query.order_by(Customer.GivenName.desc())
+
+    if sortColumn=='country':
+        if sortOrder=='asc':
+            list_of_customers=Customer.query.order_by(Customer.Country.asc())
+        else:
+            list_of_customers=Customer.query.order_by(Customer.Country.desc())
+
+    if sortColumn=='city':
+        if sortOrder=='asc':
+            list_of_customers=Customer.query.order_by(Customer.City.asc())
+        else:
+            list_of_customers=Customer.query.order_by(Customer.City.desc())
+        
+    paginationObject=list_of_customers.paginate(page = page,per_page=50, error_out = False)
 
     return render_template("customers.html",
-                            customers = customers,
-                            redirect= "customres",
-                            activePage="customers_page"
+                            list_of_customers=paginationObject,
+                            activePage="customers_page",
+                            pages = paginationObject.pages,
+                            page =page,
+                            sortColumn=sortColumn,
+                            sortOrder = sortOrder,
+                            has_prev=paginationObject.has_prev,
+                            has_next=paginationObject.has_next,
+                            redirect= "/customres",
+                            q=q
                             )
 
 @app.route("/customer/<id>")

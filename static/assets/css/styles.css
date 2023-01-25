@@ -437,7 +437,9 @@
 .search-box form {
     position: relative;
 }
-
+.input1{
+    display: inline-flex;
+}
 .search-box input {
     width: 350px;
     border-radius: 33px;
@@ -448,6 +450,7 @@
     letter-spacing: 0;
     background: #f3eeff;
 }
+
 
 .search-box input::-webkit-input-placeholder {
     color: #b1a7a7;
@@ -843,6 +846,7 @@ ul.breadcrumbs {
     color: #333;
     text-transform: capitalize;
     margin-bottom: 17px;
+    display: inline-table;
 }
 
 .single-report p {
@@ -1890,13 +1894,16 @@ p.card-text {
 
 
 /*-------------------- 16. Pagination ------------------- */
-.previous-page{
+.footer{
     
     padding-left: 5%;
     padding-bottom: 2%;
     background-color: #303641;
 }
+.page-numebr{
 
+    border-color:#dee2e6
+}
 
 .page-link{
     position:relative;display:block;
@@ -1965,8 +1972,10 @@ p.card-text {
 }
 
 .pagination{
-    padding-top: 1.5%;
-    display: inline-flex;
+    margin-bottom: 1%;
+    padding-top: 1%;
+    padding-bottom: 1.5%;
+    padding-left: 85%;
 
 }
 .previous{
@@ -2026,12 +2035,16 @@ p.card-text {
 }
 
 label {
-    font-weight: 500;
+    font-weight: 700;
     color: #666;
-    display: inline-block;
-    margin-bottom: 8px;
+    display: inline-flex;
+    margin-bottom: 20px;
     margin-bottom: .5rem;
+    
+    
+    
 }
+
 
 .font-14 {
     font-size: 14px;
@@ -2065,6 +2078,11 @@ label {
 
 .custom-control-label {
     margin-top: 2px;
+}
+.custom-select{
+    inline-size: auto;
+    margin-left: 7px;
+    margin-right: 7px;
 }
 
 /*-------------------- END Form ------------------- */
@@ -2247,6 +2265,7 @@ table.dataTable thead td {
     background: #303641;
     color: #fff;
     height: 40px;
+
 }
 
 .datatable-dark .dataTables_paginate .page-item.active .page-link,

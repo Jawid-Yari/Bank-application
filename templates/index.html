@@ -6,7 +6,10 @@
     
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    {% block title %}  {% endblock %}
+    <title>
+        {% block title %} {% endblock %}
+    </title>
+   
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/summernote.css')}}">
     <link rel="shortcut icon" type="image/png" href="{{ url_for('static',filename='assets/images/icon/favicon.ico')}}">
@@ -172,12 +175,9 @@
                             <span></span>
                             <span></span>
                         </div>
-                        <div class="search-box pull-left">
-                            <form action="#">
-                                <input type="text" name="search" placeholder="customer number" required>
-                                <a href="/customers"><i class="ti-search"></i></a>
-                            </form>
-                        </div>
+                        {% block search %}
+                        
+                        {% endblock %}
                     </div>
                     <!-- profile info & task notification -->
                     <div class="col-md-6 col-sm-4 clearfix">
@@ -582,11 +582,7 @@
         <script src="{{ url_for('static',filename='assets/js/plugins.js')}}"></script>
         <script src="{{ url_for('static',filename='assets/js/scripts.js')}}"></script>
     </body>
-    <footer>
-        {% block paging %}
-        
-        {% endblock %}
-    </footer>
-    
+    {% block footer %}
+    {% endblock %}
     </html>
 
