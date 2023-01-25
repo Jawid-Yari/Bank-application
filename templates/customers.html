@@ -4,12 +4,13 @@
   Customer page 
 {% endblock %}
 {% block search %}
-<div class="search-box pull-left">
-    <form method="get">
-        <input type="text" placeholder="customer number" value="{{q}}" name ="q" required>
-        <a href="#"><i class="ti-search"></i></a>
-    </form>
-</div>
+<form method="get" action="">
+    <label for="from">
+        <i class="ion-location"></i>
+    </label>
+    <input type="search" placeholder="customer number" value="{{q}}" name ="q" required>
+    <input type="submit" value="Search">
+</form>
 {% endblock %}
 {% block main %}
     <div class="card">
