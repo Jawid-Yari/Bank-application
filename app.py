@@ -64,33 +64,33 @@ def customers():
     )
     if sortColumn=='id':
         if sortOrder =='asc':
-            list_of_customers=Customer.query.order_by(Customer.Id.asc())
+            list_of_customers=list_of_customers.order_by(Customer.Id.asc())
         else:
-            list_of_customers=Customer.query.order_by(Customer.Id.desc())
+            list_of_customers=list_of_customers.order_by(Customer.Id.desc())
 
     if sortColumn=='name':
         if sortOrder=='asc':
-            list_of_customers=Customer.query.order_by(Customer.Surname.asc())
+            list_of_customers=list_of_customers.order_by(Customer.Surname.asc())
         else:
-            list_of_customers=Customer.query.order_by(Customer.Surname.desc())
+            list_of_customers=list_of_customers.order_by(Customer.Surname.desc())
         
     if sortColumn=='givenName':
         if sortOrder=='asc':
-            list_of_customers=Customer.query.order_by(Customer.GivenName.asc())
+            list_of_customers=list_of_customers.order_by(Customer.GivenName.asc())
         else:
-            list_of_customers=Customer.query.order_by(Customer.GivenName.desc())
+            list_of_customers=list_of_customers.order_by(Customer.GivenName.desc())
 
     if sortColumn=='country':
         if sortOrder=='asc':
-            list_of_customers=Customer.query.order_by(Customer.Country.asc())
+            list_of_customers=list_of_customers.order_by(Customer.Country.asc())
         else:
-            list_of_customers=Customer.query.order_by(Customer.Country.desc())
+            list_of_customers=list_of_customers.order_by(Customer.Country.desc())
 
     if sortColumn=='city':
         if sortOrder=='asc':
-            list_of_customers=Customer.query.order_by(Customer.City.asc())
+            list_of_customers=list_of_customers.order_by(Customer.City.asc())
         else:
-            list_of_customers=Customer.query.order_by(Customer.City.desc())
+            list_of_customers=list_of_customers.order_by(Customer.City.desc())
         
     paginationObject=list_of_customers.paginate(page = page,per_page=50, error_out = False)
 
