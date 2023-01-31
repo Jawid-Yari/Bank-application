@@ -31,14 +31,24 @@ migrate = Migrate(app,db)
 #     transactions = db.session.query(Transaction).filter(Transaction.account_number == account_number).all()
 #     return render_template('account.html', account=account, transactions=transactions)
 
-
 @app.route("/")
+def login():
+    return render_template(
+        "login.html"
+    )
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect("/")
+
+
+@app.route("/home")
 def home():
     account = Account.query.filter(Account.Balance)
     balance = 0
     for a in account:
         balance +=a.Balance
-
     return render_template("home.html",
                             number_of_accounts= Account.query.count(),
                             number_of_customers = Customer.query.count(),
@@ -48,19 +58,11 @@ def home():
                             )
     
 
-
-
 @app.route("/customers")
 @auth_required()
 @roles_accepted("Admin", "Cashier")
 def customers():
     accounts = Account.query.all()
-    # for a in accounts:
-    #     if 
-    # balance = Account.query.filter_by(CustomerId=customers.Id)
-    # current_balance =0
-    
-    
     sortColumn=request.args.get('sortColumn', 'id')
     sortOrder=request.args.get('sortOrder', 'asc')
     list_of_customers=Customer.query
