@@ -1,17 +1,22 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, upgrade
-
+from flask_security import roles_accepted, auth_required, logout_user
+import os
 from model import db, seedData, Customer, Account
 
  
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:hej123@localhost/StarBank'
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", 'Kp10kHudawanDa594-2ToBiaEnji-9OnAchoRaNaraFt')
+app.config['SECURITY_PASSWORD_SALT'] = os.environ.get("SECURITY_PASSWORD_SALT", '146585145368132386173505678016728509634')
+app.config["REMEMBER_COOKIE_SAMESITE"] = "strict"
+app.config["SESSION_COOKIE_SAMESITE"] = "strict"
 db.app = app
 db.init_app(app)
 migrate = Migrate(app,db)
- 
- 
+
+
 
 # @app.route("/")
 # def startpage():
@@ -46,6 +51,8 @@ def home():
 
 
 @app.route("/customers")
+@auth_required()
+@roles_accepted("Admin", "Cashier")
 def customers():
     accounts = Account.query.all()
     # for a in accounts:
