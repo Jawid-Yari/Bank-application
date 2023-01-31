@@ -1893,7 +1893,9 @@ table.dbkit-table tr td {
 /*-------------------- END Button ------------------- */
 
 /*-------------------- 12. Cards ------------------- */
-
+.card{
+    display: inline;
+}
 .title {
     font-size: 18px;
     color: #444;

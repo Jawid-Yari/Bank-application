@@ -1,0 +1,78 @@
+{% extends "index.html" %}
+
+{% block title %}
+customer-profile
+{% endblock %}
+
+{% block main %}
+
+<div class="main-content-inner">
+    <div class="row">
+        <div class="col-lg-12 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <div class="invoice-area">
+                   
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <div class="invoice-address">
+                                    <h3>Customer Details</h3>
+                                    <h5>Address</h5>
+                                    <p>{{customer.Streetaddress}}</p>
+                                    <p>{{customer.Zipcode}}</p>
+                                    <p>{{customer.City}}, {{customer.Country}}</p>
+                                    <br>
+                                    <hr>
+                                    <h5>Accounts</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-md-right">
+                                <ul class="invoice-date">
+                                    <li>Nationl ID : {{customer.NationalId}}</li>
+                                    <li>Phone Number : {{customer.Telephone}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="invoice-table table-responsive mt-5">
+                            <table class="table table-bordered table-hover text-right">
+                                <thead>
+                                    <tr class="text-capitalize">
+                                        <th class="text-center" style="width: 5%;">Account Nr </th>
+                                        <th class="text-center" style="width: 45%; min-width: 130px;">Type</th>
+                                        <th>Created date</th>
+                                        <th style="min-width: 100px"></th>
+                                        <th>Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for a in accounts %}
+                                    <tr>
+                                        <td class="text-center">{{a.Id}}</td>
+                                        <td class="text-center">{{a.AccountType}}</td>
+                                        <td>{{a.Created}}</td>
+                                        <td></td>
+                                        <td>{{a.Balance}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="4">TOTAL BALANCE :</td>
+                                        <td>{{total_balance}} Kr</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="invoice-buttons text-right">
+                        <a href="#" class="invoice-btn">print</a>
+                        <a href="#" class="invoice-btn">send via mail</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

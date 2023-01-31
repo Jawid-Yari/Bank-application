@@ -18,6 +18,27 @@ migrate = Migrate(app,db)
 #     trendingCategories = Category.query.all()
 #     return render_template("index.html", trendingCategories=trendingCategories)
 
+#-------------------------
+#from chatgdp
+# @app.route('/')
+# def home():
+#     # kod för att hämta statistik om antalet kunder, antalet konton och summan av saldot på konton
+#     return render_template('home.html', customers=customers, accounts=accounts, total_balance=total_balance)
+
+# @app.route('/customer/<int:customer_id>')
+# def customer_view(customer_id):
+#     customer = db.session.query(Customer).filter(Customer.id == customer_id).first()
+#     accounts = db.session.query(Account).filter(Account.customer_id == customer_id).all()
+#     total_balance = sum([account.balance for account in accounts])
+#     return render_template('customer.html', customer=customer, accounts=accounts, total_balance=total_balance)
+
+# @app.route('/account/<int:account_number>')
+# def account_view(account_number):
+#     account = db.session.query(Account).filter(Account.number == account_number).first()
+#     transactions = db.session.query(Transaction).filter(Transaction.account_number == account_number).all()
+#     return render_template('account.html', account=account, transactions=transactions)
+
+
 @app.route("/")
 def home():
     account = Account.query.filter(Account.Balance)
@@ -107,10 +128,25 @@ def customers():
                             q=q
                             )
 
-@app.route("/customer/<id>")
-def customer(id):
-    customer = Customer.query.filter_by(Id = id).first()
-    return render_template("customer.html"
+# @app.route('/customer/<int:customer_id>')
+# def customer_view(customer_id):
+#     customer = db.session.query(Customer).filter(Customer.id == customer_id).first()
+#     accounts = db.session.query(Account).filter(Account.customer_id == customer_id).all()
+#     total_balance = sum([account.balance for account in accounts])
+#     return render_template('customer.html', customer=customer, accounts=accounts, total_balance=total_balance)
+
+
+@app.route("/customer/<int:customer_id>")
+def customer(customer_id):
+    customer = db.session.query(Customer).filter(Customer.Id == customer_id).first()
+    accounts = db.session.query(Account).filter(Account.CustomerId == customer_id).all()
+    total_balance = sum([account.Balance for account in accounts])
+    return render_template("customer_profile.html",
+                           customer = customer,
+                           accounts = accounts,
+                           total_balance = total_balance,
+                           redirect = "/customer",
+                           activePage = 'profile'
                             )
 
 

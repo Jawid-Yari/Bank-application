@@ -77,18 +77,13 @@
                                             <i class="fa fa-caret-up"></i>
                                         </a>
                                     </th>
-                                    <th style="width: 200px;">Balance
-                                        <a href="/customers?sortColumn=balance&sortOrder=ascq={{ q }}">
-                                            <i class="fa fa-caret-down"></i>
-                                        </a>
-                                        <a href="/customers?sortColumn=balance&sortOrder=ascq={{ q }}">
-                                         <i class="fa fa-caret-up"></i>
-                                        </a>
+                                    <th style="width: 200px;">Kundbild
+                                        
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for c in list_of_customers  %}
+                                {% for c in list_of_customers %}
                                 <tr>
                                         <td >{{c.Id}}</td>
                                         <td >{{c.Surname}}</td>
@@ -125,9 +120,9 @@
             </a>
         </li>
         {% endif %}
-        <li class="page-item"><a class="page-link" href="/customers">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="/customers?page={{1}}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">1</a></li>
+        <li class="page-item"><a class="page-link" href="/customers?page={{2}}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">2</a></li>
+        <li class="page-item"><a class="page-link" href="/customers?page={{3}}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">3</a></li>
         {% if has_next %}
         <li class="page-item">
             <a class="page-link" href="/customers?page={{page +1}}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}" aria-label="Next">
