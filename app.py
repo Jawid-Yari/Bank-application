@@ -19,18 +19,6 @@ migrate = Migrate(app,db)
 #     return render_template("index.html", trendingCategories=trendingCategories)
 
 #-------------------------
-#from chatgdp
-# @app.route('/')
-# def home():
-#     # kod för att hämta statistik om antalet kunder, antalet konton och summan av saldot på konton
-#     return render_template('home.html', customers=customers, accounts=accounts, total_balance=total_balance)
-
-# @app.route('/customer/<int:customer_id>')
-# def customer_view(customer_id):
-#     customer = db.session.query(Customer).filter(Customer.id == customer_id).first()
-#     accounts = db.session.query(Account).filter(Account.customer_id == customer_id).all()
-#     total_balance = sum([account.balance for account in accounts])
-#     return render_template('customer.html', customer=customer, accounts=accounts, total_balance=total_balance)
 
 # @app.route('/account/<int:account_number>')
 # def account_view(account_number):
@@ -127,13 +115,6 @@ def customers():
                             redirect= "/customres",
                             q=q
                             )
-
-# @app.route('/customer/<int:customer_id>')
-# def customer_view(customer_id):
-#     customer = db.session.query(Customer).filter(Customer.id == customer_id).first()
-#     accounts = db.session.query(Account).filter(Account.customer_id == customer_id).all()
-#     total_balance = sum([account.balance for account in accounts])
-#     return render_template('customer.html', customer=customer, accounts=accounts, total_balance=total_balance)
 
 
 @app.route("/customer/<int:customer_id>")

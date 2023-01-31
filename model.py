@@ -1,10 +1,27 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_security import hash_password
+from flask_security import Security, SQLAlchemyUserDatastore, auth_required, hash_password
+from flask_security.models import fsqla_v3 as fsqla
 import barnum
 import random
 from datetime import datetime  
 from datetime import timedelta  
 
 db = SQLAlchemy()
+
+fsqla.FsModels.set_db_info(db)
+
+class User(db.Model, fsqla.FsUserMixin):
+    id = db.Column(db.Integer, primary_key = True)
+    email = db.Column(db.String(100), unique= True)
+    password= db.Column(db.String(255))
+    active = db.Column(db.Boolean)
+
+class Role(db.Model, fsqla.FsRoleMixin):
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(100), unique = True) 
+
+
 
 class Customer(db.Model):
     __tablename__= "Customers"
