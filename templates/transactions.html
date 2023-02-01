@@ -28,31 +28,28 @@ transaction
                             <table class="table table-bordered table-hover text-right">
                                 <thead>
                                     <tr class="text-capitalize">
-                                        <th class="text-center" style="width: 5%;">Account ID </th>
-                                        <th class="text-center" style="width: 45%; min-width: 130px;">Type</th>
-                                        <th class="text-left">Operation</th>
-                                        <th class="text-center">Date</th>
-                                        <th style="min-width: 100px">Amount</th>
-                                        <th>New Balance</th>
+                                        <th class="text-center" style="width: 5%;">ACCOUNT ID </th>
+                                        <th class="text-center" style="width: 45%; min-width: 130px;">DATE</th>
+                                        <th class="text-left">OPERATION</th>
+                                        <th class="text-center">TYPE</th>
+                                        <th style="min-width: 100px">AMOUNT</th>
+                                        <th>NEW BALANCE</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for t in transactions %}
                                     <tr>
                                         <td class="text-center">{{t.AccountId}}</td>
-                                        <td class="text-center">{{t.Type}}</td>
+                                        <td class="text-center">{{t.Date}}</td>
+                                        
                                         <td class="text-left">{{t.Operation}}</td>
-                                        <td text-center>{{t.Date}}</td>
+                                        <td class="text-center">{{t.Type}}</td>
                                         <td>{{t.Amount}}</td>
                                         <td>{{t.NewBalance}}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        
-                                    </tr>
-                                </tfoot>
+                               
                             </table>
                         </div>
                     </div>
