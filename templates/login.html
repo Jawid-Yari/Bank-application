@@ -34,7 +34,7 @@
     </div>
     <!-- preloader area end -->
     <!-- login area start -->
-    <div class="login-area login-s2">
+    <!-- <div class="login-area login-s2">
         <div class="container">
             <div class="login-box ptb--100">
                 <form>
@@ -74,9 +74,11 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- login area end -->
-
+    {% block content %}
+    
+    {% endblock %}
     <!-- jquery latest version -->
     <script src="{{url_for('static', filename = 'assets/js/vendor/jquery-2.2.4.min.js')}}"></script>
     <!-- bootstrap 4 js -->

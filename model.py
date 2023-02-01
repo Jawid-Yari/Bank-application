@@ -11,18 +11,17 @@ db = SQLAlchemy()
 
 fsqla.FsModels.set_db_info(db)
 
+class Role(db.Model, fsqla.FsRoleMixin):
+    pass
+    # id = db.Column(db.Integer, primary_key = True)
+    # name = db.Column(db.String(100), unique = True) 
+
 class User(db.Model, fsqla.FsUserMixin):
     # id = db.Column(db.Integer, primary_key = True)
     # email = db.Column(db.String(100), unique= True)
     # password= db.Column(db.String(255))
     # active = db.Column(db.Boolean)
     pass
-
-class Role(db.Model, fsqla.FsRoleMixin):
-    pass
-    # id = db.Column(db.Integer, primary_key = True)
-    # name = db.Column(db.String(100), unique = True) 
-
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 
 
@@ -70,7 +69,7 @@ class Transaction(db.Model):
 
 def seedData(app, db):
     app.security = Security(app, user_datastore)
-    app.security.datastore.db.create_all()
+    #app.security.datastore.db.create_all()
     if not app.security.datastore.find_role("Admin"):
         app.security.datastore.create_role(name="Admin")
     if not app.security.datastore.find_role("Cashier"):

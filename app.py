@@ -7,7 +7,7 @@ from model import db, seedData, Customer, Account
 
  
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:hej123@localhost/StarBank'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:hej123@localhost/starbank'
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", 'Kp10kHudawanDa594-2ToBiaEnji-9OnAchoRaNaraFt')
 app.config['SECURITY_PASSWORD_SALT'] = os.environ.get("SECURITY_PASSWORD_SALT", '146585145368132386173505678016728509634')
 app.config["REMEMBER_COOKIE_SAMESITE"] = "strict"
@@ -18,24 +18,15 @@ migrate = Migrate(app,db)
 
 
 
+
+
+
 # @app.route("/")
-# def startpage():
-#     trendingCategories = Category.query.all()
-#     return render_template("index.html", trendingCategories=trendingCategories)
-
-#-------------------------
-
-# @app.route('/account/<int:account_number>')
-# def account_view(account_number):
-#     account = db.session.query(Account).filter(Account.number == account_number).first()
-#     transactions = db.session.query(Transaction).filter(Transaction.account_number == account_number).all()
-#     return render_template('account.html', account=account, transactions=transactions)
-
-@app.route("/")
-def login():
-    return render_template(
-        "login.html"
-    )
+# def login():
+#     return render_template(
+#         "login.html",
+#         redirect = "/customers"
+#     )
 
 @app.route("/logout")
 def logout():
@@ -43,7 +34,7 @@ def logout():
     return redirect("/")
 
 
-@app.route("/home")
+@app.route("/")
 def home():
     account = Account.query.filter(Account.Balance)
     balance = 0
@@ -121,7 +112,7 @@ def customers():
                             sortOrder = sortOrder,
                             has_prev=paginationObject.has_prev,
                             has_next=paginationObject.has_next,
-                            redirect= "/customres",
+                            redirect="/customres",
                             q=q
                             )
 
@@ -154,7 +145,7 @@ def tables():
 if __name__  == "__main__":
     with app.app_context():
         upgrade()
-        seedData(db)
+        seedData(app,db)
         app.run(debug=True)
         
 
