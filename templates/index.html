@@ -347,17 +347,23 @@
                                     {%elif activePage == 'profile'%}
                                     <li><a href="/">home</a></li>
                                    <li><a href="/customers">Customers</a></li>
+                                   <li><a href="#">Customer Profile</a></li>
+                                   {%elif activePage == 'transaction'%}
+                                   <li><a href="/">home</a></li>
+                                   <li><a href="/customers">Customers</a></li>
                                    <li><a href="/customer">Customer Profile</a></li>
+                                   <li>Transactions</li>
                                     {%endif%}
                                 
                                 </li>
                             </ul>
                         </div>
                     </div>
+                    {% if current_user.is_authenticated %}
                     <div class="col-sm-6 clearfix">
                         <div class="user-profile pull-right">
-                            <img class="avatar user-thumb" src="{{url_for('static',filename='assets/images/author/avatar.png')}}" alt="avatar">
-                            <h4 class="user-name dropdown-toggle" data-toggle="dropdown">Jawid Yari <i class="fa fa-angle-down"></i></h4>
+                            <img class="avatar user-thumb" src="{{url_for('static',filename='assets/images/author/stefan-holmberg.jpg')}}" alt="avatar">
+                            <h4 class="user-name dropdown-toggle" data-toggle="dropdown">Stefan H <i class="fa fa-angle-down"></i></h4>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#">Message</a>
                                 <a class="dropdown-item" href="#">Settings</a>
@@ -372,6 +378,7 @@
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
             {% block main %}

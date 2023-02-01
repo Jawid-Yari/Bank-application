@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, upgrade
 from flask_security import roles_accepted, auth_required, logout_user
 import os
-from model import db, seedData, Customer, Account
+from model import db, seedData, Customer, Account, Transaction
 
  
 app = Flask(__name__)
@@ -129,6 +129,19 @@ def customer(customer_id):
                            redirect = "/customer",
                            activePage = 'profile'
                             )
+
+@app.route("/transaction/<int:account_id>")
+def transactions(account_id):
+    transactions = db.session.query(Transaction).filter(Transaction.AccountId == account_id).all()
+    account = db.session.query(Account).filter(Account.Id == account_id).first()
+    return render_template("transactions.html",
+                           transactions= transactions,
+                           account = account,
+                           redirect="/transaction",
+                           activePage = 'transaction'
+
+                            )
+
 
 
 @app.route("/category/<id>")
