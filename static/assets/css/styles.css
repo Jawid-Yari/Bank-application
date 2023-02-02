@@ -70,6 +70,10 @@ hr{
 table { 
     min-width: 100%;
 }
+#login{
+    
+    background-image:url(/static/assets/images/author/background.jpg);
+}
 /*------------------------- 1. Core Css -------------------*/
 
 .page-container {
