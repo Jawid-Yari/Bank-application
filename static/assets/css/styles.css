@@ -54,6 +54,16 @@
 .clickable:hover{
     background-color: #c8d7f0;
 }
+
+.text-capitalize{
+    background-color: #d3d5d6;
+    text-decoration:double;
+    color: #8800ff;
+}
+hr{
+    color: #8800ff;
+    width: 50%;
+}
 /*------------------------- 1. Core Css -------------------*/
 
 .page-container {
