@@ -64,6 +64,12 @@ hr{
     color: #8800ff;
     width: 50%;
 }
+.dataTable{
+    box-sizing: content-box;
+}
+table { 
+    min-width: 100%;
+}
 /*------------------------- 1. Core Css -------------------*/
 
 .page-container {
