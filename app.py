@@ -100,9 +100,14 @@ def customers():
             list_of_customers=list_of_customers.order_by(Customer.City.asc())
         else:
             list_of_customers=list_of_customers.order_by(Customer.City.desc())
+    if sortColumn=='phone':
+        if sortOrder=='asc':
+            list_of_customers = list_of_customers.order_by(Customer.Telephone.asc())
+        else:
+            list_of_customers= list_of_customers.order_by(Customer.Telephone.desc())
         
     paginationObject=list_of_customers.paginate(page = page,per_page=50, error_out = False)
-
+    
     return render_template("customers.html",
                             list_of_customers=paginationObject,
                             activePage="customers_page",

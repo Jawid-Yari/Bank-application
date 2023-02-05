@@ -13,126 +13,116 @@
 </form>
 {% endblock %}
 {% block main %}
-    <div class="card">
-        <div class="card-body">
-            
-            <div class="data-tables datatable-dark">
-           
+   
+<div class="data-tables datatable-dark">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="main-content-inner">
                 <div class="row">
-                    <div class="col-sm-12">
-                        <!-- <div class="col-sm-12 col-md-6">
-                            <div class="dataTables_length" id="dataTable3_length">
-                                <h4 class="header-title">All Customers,</h4>
-                                <label>Show 
-                                    <select class="custom-select">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                    </select> entries
-                                </label>
-                           
+                    <div class="col-lg-12 mt-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="invoice-area">
+                            
+                                    <div class="row align-items-center">
+                                        <div class="col-md-6">
+                                            <div class="invoice-address">
+                                                <h3>TRANSACTIONS</h3>
+                                                <h6>Acount Type:</h6>
+                                            
+                                                <hr>
+                                            </div>
+                                        </div>
+                                    
+                                    </div>
+                                    <div class="invoice-table table-responsive mt-5">
+                                        <table class="table table-bordered table-hover text-right">
+                                            <thead>
+                                                <tr id="text-capitalize">
+                                                    <th class="text-center" style="width: 10%;">ID
+                                                        <a href="/customers?sortColumn=id&sortOrder=asc">
+                                                            <i class="fa fa-caret-down"></i> 
+                                                        </a>
+                                                        <a href="/customers?sortColumn=id&sortOrder=desc">
+                                                            <i class="fa fa-caret-up"></i>
+                                                        </a>
+                                                    </th>
+                                                    <th class="text-center" style="width: 45%; min-width: 130px;">NAME
+                                                        <a href="/customers?sortColumn=name&sortOrder=ascq={{ q }}">
+                                                            <i class="fa fa-caret-down"></i>
+                                                        </a>
+                                                        <a href="/customers?sortColumn=name&sortOrder=descq={{ q }}">
+                                                        <i class="fa fa-caret-up"></i>
+                                                        </a>
+                                                    </th>
+                                                    <th class="text-left">COUNTRY
+                                                        <a href="/customers?sortColumn=country&sortOrder=ascq={{ q }}">
+                                                            <i class="fa fa-caret-down"></i>
+                                                        </a>
+                                                        <a href="/customers?sortColumn=country&sortOrder=descq={{ q }}">
+                                                            <i class="fa fa-caret-up"></i>
+                                                        </a>
+                                                    </th>
+                                                    <th class="text-center">CITY
+                                                        <a href="/customers?sortColumn=city&sortOrder=ascq={{ q }}">
+                                                            <i class="fa fa-caret-down"></i>
+                                                        </a>
+                                                        <a href="/customers?sortColumn=city&sortOrder=descq={{ q }}">
+                                                            <i class="fa fa-caret-up"></i>
+                                                        </a>
+                                                    </th>
+                                                    <!-- <th style="min-width: 100px">AMOUNT</th>
+                                                    <th>NEW BALANCE</th> -->
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for c in list_of_customers %}
+                                                <tr  class="clickable" onclick="window.location='/customer/{{c.Id}}'">
+                                                    <td class="text-center">{{c.Id}}</td>
+                                                    <td class="text-center">{{c.Surname}}</td>
+                                                    
+                                                    <td class="text-left">{{c.Country}}</td>
+                                                    <td class="text-center">{{c.City}}</td>
+                                                
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="invoice-buttons text-right">
+                                    <ul class="pagination">
+                                    {% if has_prev %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="/customers?page={{page -1}}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}?" aria-label="Previous">
+                                            <span aria-hidden="true">«</span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                    <li class="page-item"><a class="page-link" href="/customers?page={{1}}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="/customers?page={{2}}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="/customers?page={{3}}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">3</a></li>
+                                    {% if has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="/customers?page={{page +1}}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}" aria-label="Next">
+                                            <span aria-hidden="true">»</span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                    </ul>
+                                </div>
                             </div>
-                        </div> -->
-                        <table class="text-center dataTable no-footer dtr-inline collapsed" role="grid" aria-describedby="dataTable3_info" style="width: 1345px;">
-                            <thead class="text-capitalize">
-                                <tr role="row">
-                                    <th style="width: 200px;"  >ID
-                                        <a href="/customers?sortColumn=id&sortOrder=asc">
-                                            <i class="fa fa-caret-down"></i> 
-                                        </a>
-                                        <a href="/customers?sortColumn=id&sortOrder=desc">
-                                            <i class="fa fa-caret-up"></i>
-                                        </a>
-                                    </th>
-                                    <th style="width: 200px;" class="text-left" >Name
-                                        <a href="/customers?sortColumn=name&sortOrder=ascq={{ q }}">
-                                            <i class="fa fa-caret-down"></i>
-                                        </a>
-                                        <a href="/customers?sortColumn=name&sortOrder=descq={{ q }}">
-                                          <i class="fa fa-caret-up"></i>
-                                        </a>
-                                        </th>
-                                    <th style="width: 200px;" class="text-left">Given Name
-                                        <a href="/customers?sortColumn=givenName&sortOrder=ascq={{ q }}">
-                                            <i class="fa fa-caret-down"></i>
-                                        </a> 
-                                        <a href="/customers?sortColumn=givenName&sortOrder=descq={{ q }}">
-                                            <i class="fa fa-caret-up"></i>
-                                        </a>
-                                    </th>
-                                    <th style="width: 200px;" class="text-left">Country
-                                        <a href="/customers?sortColumn=country&sortOrder=ascq={{ q }}">
-                                            <i class="fa fa-caret-down"></i>
-                                        </a>
-                                        <a href="/customers?sortColumn=country&sortOrder=descq={{ q }}">
-                                            <i class="fa fa-caret-up"></i>
-                                        </a>
-                                    </th>
-                                    <th style="width: 200px;" class="text-left">City
-                                        <a href="/customers?sortColumn=city&sortOrder=ascq={{ q }}">
-                                            <i class="fa fa-caret-down"></i>
-                                        </a>
-                                        <a href="/customers?sortColumn=city&sortOrder=descq={{ q }}">
-                                            <i class="fa fa-caret-up"></i>
-                                        </a>
-                                    </th>
-                                       <th style="width: 200px;">Kundbild
-                                        
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for c in list_of_customers %}
-                                <tr class="clickable" onclick="window.location='/customer/{{c.Id}}'">
-                                        <td >{{c.Id}}</td>
-                                        <td class="text-left">{{c.Surname}}</td>
-                                        <td class="text-left">{{c.GivenName}}</td>
-                                        <td class="text-left">{{c.Country}}</td>
-                                        <td class="text-left">{{c.City}}</td>
-                                        <td>
-                                            <a href="/customer/{{c.Id}}" class="btn">More info</a>
-                                        </td>
-                                        
-                                </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-{% endblock %}
-
-{% block footer %}
-
-<div class="footer">
-
-    <ul class="pagination">
-        {% if has_prev %}
-        <li class="page-item">
-            <a class="page-link" href="/customers?page={{page -1}}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}?" aria-label="Previous">
-                <span aria-hidden="true">«</span>
-                <span class="sr-only">Previous</span>
-            </a>
-        </li>
-        {% endif %}
-        <li class="page-item"><a class="page-link" href="/customers?page={{1}}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">1</a></li>
-        <li class="page-item"><a class="page-link" href="/customers?page={{2}}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">2</a></li>
-        <li class="page-item"><a class="page-link" href="/customers?page={{3}}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}">3</a></li>
-        {% if has_next %}
-        <li class="page-item">
-            <a class="page-link" href="/customers?page={{page +1}}&sortColumn={{ sortColumn }}&sortOrder={{ sortOrder }}&q={{ q }}" aria-label="Next">
-                <span aria-hidden="true">»</span>
-                <span class="sr-only">Next</span>
-            </a>
-        </li> -->
-        {% endif %}
 </div>
-
-
+    
 
 {% endblock %}
+

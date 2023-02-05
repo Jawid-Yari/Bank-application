@@ -366,8 +366,13 @@
                     {% if current_user.is_authenticated %}
                     <div class="col-sm-6 clearfix">
                         <div class="user-profile pull-right">
+                            {% if current_user.username=='Jawid' %}
+                            <img class="avatar user-thumb" src="{{url_for('static',filename='assets/images/author/ja.jpg')}}" alt="avatar">
+                            {% elif current_user.username=='Stefan H' %}
                             <img class="avatar user-thumb" src="{{url_for('static',filename='assets/images/author/stefan-holmberg.jpg')}}" alt="avatar">
-                            <h4 class="user-name dropdown-toggle" data-toggle="dropdown">Stefan H <i class="fa fa-angle-down"></i></h4>
+                            {% endif %}
+                            <h4 class="user-name dropdown-toggle" data-toggle="dropdown">{{current_user.username}} <i class="fa fa-angle-down"></i></h4>
+                           
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="#">Message</a>
                                 <a class="dropdown-item" href="#">Settings</a>
@@ -604,8 +609,5 @@
         <script src="{{ url_for('static',filename='assets/js/plugins.js')}}"></script>
         <script src="{{ url_for('static',filename='assets/js/scripts.js')}}"></script>
     </body>
-    {% block footer %}
-    
-    {% endblock %}
     </html>
 

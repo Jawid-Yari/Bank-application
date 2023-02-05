@@ -3,8 +3,8 @@
 
 {% block content %}
 {% include "security/_messages.html" %}
-<h1>{{ _fsdomain('Login') }}</h1>
-  <form action="{{ url_for_security('login') }}{{ prop_next() }}" method="POST" name="login_user_form">
+<h1 id="login-text">{{ _fsdomain('Login') }}</h1>
+  <form action="{{ url_for_security('login') }}{{ prop_next() }}" method="POST" name="login_user_form" id="login">
     {{ login_user_form.hidden_tag() }}
     {{ render_form_errors(login_user_form) }}
     {% if "email" in identity_attributes %}

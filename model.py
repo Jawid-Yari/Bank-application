@@ -74,10 +74,12 @@ def seedData(app, db):
         app.security.datastore.create_role(name="Admin")
     if not app.security.datastore.find_role("Cashier"):
         app.security.datastore.create_role(name="Cashier")
-    if not app.security.datastore.find_user(email="stefan.holmber@systementor.se"):
-        app.security.datastore.create_user(email="stefan.holmber@systementor.se", password=hash_password("Hejsan123#"),roles=["Admin"])
-    if not app.security.datastore.find_user(email="stefan.holmber@systementor.se"):
-        app.security.datastore.create_user(email="stefan.holmber@systementor.se", password=hash_password("Hejsan123#"),roles=["Cashier"])
+    if not app.security.datastore.find_user(email="stefan.holmberg@systementor.se",username='Stefan H'):
+        app.security.datastore.create_user(email="stefan.holmberg@systementor.se", password=hash_password("Hejsan123#"),roles=["Admin"], username='Stefan H')
+    if not app.security.datastore.find_user(email="stefan.holmberg@systementor.se", username='Stefan H'):
+        app.security.datastore.create_user(email="stefan.holmberg@systementor.se", password=hash_password("Hejsan123#"),roles=["Cashier"], username='Stefan H')
+    if not app.security.datastore.find_user(email="jawidyari123@gmail.com",username='Jawid'):
+        app.security.datastore.create_user(email="jawidyari123@gmail.com", password=hash_password("Hejsan123#"),roles=["Cashier"], username= 'Jawid')
     app.security.datastore.db.session.commit()
 
     antal =  Customer.query.count()

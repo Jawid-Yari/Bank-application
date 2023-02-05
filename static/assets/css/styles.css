@@ -50,15 +50,16 @@
    26. Offset Sidebar
 
 -----------------------------------------------------------------------------------*/
-/* table style */
+/* overlaped table style */
 .clickable:hover{
     background-color: #c8d7f0;
 }
 
 .text-capitalize{
-    background-color: #d3d5d6;
+    background-color: #8800ff;
     text-decoration:double;
-    color: #8800ff;
+    color: white;
+    opacity: 0.8;
 }
 hr{
     color: #8800ff;
@@ -70,9 +71,44 @@ hr{
 table { 
     min-width: 100%;
 }
-#login{
+
+tr:nth-child(even){
+    background-color: white;
+}
+/*--------------- login page-------------- */
+#login-background{
     
     background-image:url(/static/assets/images/author/background.jpg);
+    background-size: cover;
+
+}
+#login{
+    padding-top: 20%;
+    color: #000000;
+    margin-left: 15%;
+    margin-top: 10%;
+}
+#login-text{
+    padding-top: 15%;
+    margin-left: 40%;
+    margin-top: 65%;
+}
+.container{
+    
+    background-color: #e1e8db;
+    padding-bottom: 5%;
+    margin-bottom: 30%;
+    padding-left: 10;
+    width: 20%;
+    height: 30%;
+    margin-left: 40%;
+    margin-top: 50%;
+    border-radius: 2%;
+    box-shadow: 40px 60px 100px rgba(133, 238, 133, 0.4);
+    opacity: 0.8;
+    
+    
+   
 }
 /*------------------------- 1. Core Css -------------------*/
 
