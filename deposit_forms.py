@@ -12,6 +12,6 @@ class deposit_form1(FlaskForm):
 
 
 class deposit_form(FlaskForm):
-    account_number = SelectField('Account Number', coerce=int)
-    amount = DecimalField('Amount', places=2)
+    account_number = SelectField('Account Number', choices=[], validators=[InputRequired()])
+    amount = DecimalField('Deposit Amount', validators=[InputRequired(), NumberRange(min=0, max=5000)])
     submit = SubmitField('Submit')

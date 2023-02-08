@@ -150,7 +150,7 @@ def get_nationl_id():
         customer = Customer.query.filter_by(NationalId=form.nationalId.data).first()
         if customer:
             session['customer_id']= customer.Id
-            return redirect(url_for('deposit'))
+            return redirect("/deposit")
             
     return render_template("nationalID.html",
                             form = form
@@ -165,8 +165,10 @@ def deposit():
     form = deposit_form()
     customer_id = session.get('customer_id')
     if customer_id:
-        accounts = Account.query.filter_by(Id=customer_id).all()
-        form.account_number.choices = [(a.Id, a.AccountType) for a in accounts]
+        accounts = db.session.query(Account).filter(Account.CustomerId == customer_id).all()
+        #for a in accounts:
+            #form.account_number.choices.append(a.Id)
+        form.account_number.choices = [(a.Id) for a in accounts]
     if form.validate_on_submit():
         account = Account.query.filter_by(Id=form.account_number.data).first()
         if not account:
@@ -178,7 +180,7 @@ def deposit():
         account.Balance += form.amount.data
         db.session.commit()
         flash('Deposit Successful', 'success')
-        return redirect(url_for('customers'))
+        return redirect("/deposit")
         
     return render_template('deposit.html', form=form)
 
