@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+
+{% block main %}
+    {% include "baseForm.html" %}
+
+<form method="POST">
+    {{ form.csrf_token }}
+    {{ form.nationalId.label }}{{ form.nationalId }}
+    {{ form.submit }}
+</form>
+
+{% endblock %}

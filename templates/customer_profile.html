@@ -47,7 +47,7 @@ customer-profile
                                 <tbody>
                                     {% for a in accounts %}
                                     
-                                    <tr class="clickable" onclick="window.location='/transaction/{{a.Id}}'">
+                                    <tr class="clickable" onclick="window.location='/account-history/{{a.Id}}'">
                                         <td class="text-center">{{a.Id}}</td>
                                         <td class="text-center">{{a.AccountType}}</td>
                                         <td>{{a.Created}}</td>

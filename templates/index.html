@@ -60,16 +60,18 @@
                             <li class="active">
                                 <a href="javascript:void(0)" aria-expanded="False"><i class="ti-dashboard {{'active' if activePage == 'home_page' }}"></i><span>Home</span></a>
                                 <ul class="collapse">
-                                    <li class="{{'active' if activePage == 'customers_page' }}" ><a href="/customers">Customers</a></li>
+                                    
                                 </ul>
                             </li>
+                            <li class="{{'active' if activePage == 'customers_page' }}" ><a class="ti-receipt" href="/customers">Customers</a></li>
                             <li>
-                                <a href="javascript:void(0)" aria-expanded="true"><i class="ti-layout-sidebar-left"></i><span>Sidebar
-                                        Types
+                                <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-align-left"></i><span>
+                                    Trnasaction
                                     </span></a>
                                 <ul class="collapse">
-                                    <li><a href="index.html">Left Sidebar</a></li>
-                                    <li><a href="index3-horizontalmenu.html">Horizontal Sidebar</a></li>
+                                    <li><a href="/nationalid">Deposit</a></li>
+                                    <li><a href="/nationalid">Withdraw</a></li>
+                                    <li><a href="/nationalid">Transfer</a></li>
                                 </ul>
                             </li>
                             <li>
@@ -352,11 +354,11 @@
                                     <li><a href="/">home</a></li>
                                    <li><a href="/customers">Customers</a></li>
                                    <li>Customer Profile</li>
-                                   {%elif activePage == 'transaction'%}
+                                   {%elif activePage == 'account-history'%}
                                    <li><a href="/">home</a></li>
                                    <li><a href="/customers">Customers</a></li>
                                    <li><a href="#">Customer Profile</a></li>
-                                   <li>Transactions</li>
+                                   <li>Account History</li>
                                     {%endif%}
                                 
                                 </li>

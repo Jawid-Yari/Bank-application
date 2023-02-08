@@ -1,0 +1,13 @@
+{% extends "index.html" %}
+
+{% block main %}
+    {% include "baseForm.html" %}
+
+<form method="POST">
+    {{ form.csrf_token }}
+    {{ form.account_number.label }}{{ form.account_number }}
+    {{ form.amount.label }}{{ form.amount }}
+    {{ form.submit }}
+</form>
+
+{% endblock %}

@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, url_for,flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, upgrade
 from flask_security import roles_accepted, auth_required, logout_user
 import os
 from model import db, seedData, Customer, Account, Transaction
+from deposit_forms import deposit_form1,deposit_form
 
  
 app = Flask(__name__)
@@ -18,20 +19,6 @@ migrate = Migrate(app,db)
 
 
 
-
-
-
-# @app.route("/")
-# def login():
-#     return render_template(
-#         "login.html",
-#         redirect = "/customers"
-#     )
-
-@app.route("/logout")
-def logout():
-    logout_user()
-    return redirect("/")
 
 
 @app.route("/")
@@ -123,6 +110,8 @@ def customers():
 
 
 @app.route("/customer/<int:customer_id>")
+@auth_required()
+@roles_accepted("Admin", "Cashier")
 def customer(customer_id):
     customer = db.session.query(Customer).filter(Customer.Id == customer_id).first()
     accounts = db.session.query(Account).filter(Account.CustomerId == customer_id).all()
@@ -135,17 +124,66 @@ def customer(customer_id):
                            activePage = 'profile'
                             )
 
-@app.route("/transaction/<int:account_id>")
+@app.route("/account-history/<int:account_id>")
+@auth_required()
+@roles_accepted("Admin", "Cashier")
 def transactions(account_id):
     transactions = db.session.query(Transaction).filter(Transaction.AccountId == account_id).all()
     account = db.session.query(Account).filter(Account.Id == account_id).first()
-    return render_template("transactions.html",
+    return render_template("account-history.html",
                            transactions= transactions,
                            account = account,
-                           redirect="/transaction",
-                           activePage = 'transaction'
+                           redirect="/account-history",
+                           activePage = 'account-history'
 
                             )
+
+
+
+
+@app.route("/nationalid",  methods=['GET', 'POST'])
+@auth_required()
+@roles_accepted("Admin", "Cashier")
+def get_nationl_id():
+    form = deposit_form1()
+    if form.validate_on_submit():
+        customer = Customer.query.filter_by(NationalId=form.nationalId.data).first()
+        if customer:
+            session['customer_id']= customer.Id
+            return redirect(url_for('deposit'))
+            
+    return render_template("nationalID.html",
+                            form = form
+                            
+                        )
+
+
+@app.route("/deposit",  methods=['GET', 'POST'])
+@auth_required()
+@roles_accepted("Admin", "Cashier")
+def deposit():
+    form = deposit_form()
+    customer_id = session.get('customer_id')
+    if customer_id:
+        accounts = Account.query.filter_by(Id=customer_id).all()
+        form.account_number.choices = [(a.Id, a.AccountType) for a in accounts]
+    if form.validate_on_submit():
+        account = Account.query.filter_by(Id=form.account_number.data).first()
+        if not account:
+           flash('Account does not exist', 'danger')
+           return redirect(url_for('deposit'))
+        if form.amount.data > 5000:
+            flash('Deposit amount should not be greater than 5000', 'danger')
+            return redirect(url_for('deposit'))
+        account.Balance += form.amount.data
+        db.session.commit()
+        flash('Deposit Successful', 'success')
+        return redirect(url_for('customers'))
+        
+    return render_template('deposit.html', form=form)
+
+
+
 
 
 
@@ -159,6 +197,12 @@ def category(id):
 @app.route("/tables")
 def tables():
     return render_template("tables.html")
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect("/")
 
 if __name__  == "__main__":
     with app.app_context():
