@@ -1,0 +1,21 @@
+{% extends "index.html" %}
+
+{% block main %}
+    <h3>Withdrawal form</h3>
+<form method="POST">
+    {{ form.csrf_token }}
+    {{ form.account_number.label }}{{ form.account_number }}
+    {{ form.amount.label }}{{ form.amount }}
+    {{ form.submit }}
+</form>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class="flashes">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+{% endblock %}

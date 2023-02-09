@@ -5,9 +5,7 @@ from wtforms.validators import InputRequired, NumberRange
 
 
 
-
-
-class deposit_form(FlaskForm):
+class withdrawal_form(FlaskForm):
     account_number = SelectField('Account Number', choices=[], validators=[InputRequired()])
-    amount = DecimalField('Deposit Amount', validators=[InputRequired(), NumberRange(min=0, max=5000)])
+    amount = DecimalField('Wthdrawal Amount', validators=[InputRequired(), NumberRange(min=0, max=30000)])
     submit = SubmitField('Submit')

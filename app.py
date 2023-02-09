@@ -4,7 +4,9 @@ from flask_migrate import Migrate, upgrade
 from flask_security import roles_accepted, auth_required, logout_user
 import os
 from model import db, seedData, Customer, Account, Transaction
-from deposit_forms import deposit_form1,deposit_form
+from deposit_forms import deposit_form
+from withdrawal_form import withdrawal_form
+from authenticcation_form import authentication_form
 
  
 app = Flask(__name__)
@@ -141,18 +143,29 @@ def transactions(account_id):
 
 
 
-@app.route("/nationalid",  methods=['GET', 'POST'])
+@app.route("/authentication",  methods=['GET', 'POST'])
 @auth_required()
 @roles_accepted("Admin", "Cashier")
 def get_nationl_id():
-    form = deposit_form1()
+    form = authentication_form()
     if form.validate_on_submit():
         customer = Customer.query.filter_by(NationalId=form.nationalId.data).first()
         if customer:
             session['customer_id']= customer.Id
-            return redirect("/deposit")
+            if form.transaction_type.data == "deposit":
+                return redirect("/deposit")
+            elif form.transaction_type.data == "withdraw":
+                return redirect("/withdraw")
+            elif form.transaction_type.data == "transfer":
+                return redirect("/transfer")
+            else:
+                flash('Invalid choice', 'danger')
+                return redirect('/authentication')
+        else:
+            flash('Customer not found', 'error')
+            return redirect('/authentication')
             
-    return render_template("nationalID.html",
+    return render_template("authentication.html",
                             form = form
                             
                         )
@@ -168,7 +181,7 @@ def deposit():
         accounts = db.session.query(Account).filter(Account.CustomerId == customer_id).all()
         #for a in accounts:
             #form.account_number.choices.append(a.Id)
-        form.account_number.choices = [(a.Id) for a in accounts]
+        form.account_number.choices = [(account.Id) for account in accounts]
     if form.validate_on_submit():
         account = Account.query.filter_by(Id=form.account_number.data).first()
         if not account:
@@ -182,9 +195,37 @@ def deposit():
         flash('Deposit Successful', 'success')
         return redirect("/deposit")
         
-    return render_template('deposit.html', form=form)
+    return render_template('deposit.html',
+                             form=form
+                            )
 
 
+
+@app.route("/withdraw", methods=['GET', 'POST'])
+@auth_required()
+@roles_accepted("Admin", "Cashier")
+def withdraw():
+    form = withdrawal_form()
+    customer_id = session.get('customer_id')
+    if customer_id:
+        accounts= db.session.query(Account).filter(Account.CustomerId == customer_id).all()
+        form.account_number.choices = [(account.Id) for account in accounts]
+    if form.validate_on_submit():
+        account = Account.query.filter_by(Id = form.account_number.data).first()
+        if not account:    
+            flash('Account does not exist', 'danger')
+            return redirect('/withdraw')
+        if account.Balance < form.amount.data:
+            flash('Too low balance', 'error')
+            return redirect('/withdraw')
+        account.Balance -= form.amount.data
+        db.session.commit()
+        flash('Withdrawal Succesful', 'success')
+        return redirect('/withdraw')
+
+    return render_template('withdrawal.html',
+                            form = form
+                            )
 
 
 
