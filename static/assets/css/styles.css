@@ -140,6 +140,37 @@ div.sub{
 div.alert{
     
 }
+
+.form-group {
+    margin: 20px 0;
+  }
+
+label {
+    font-weight: bold;
+}
+
+input[type=text], input[type=password] {
+    
+    width: 100%;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 8px 100px;
+}
+
+input[type=submit] {
+    padding: 8px 12px;
+    background-color: #8800ff;
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+  .error {
+    color: red;
+}
+
 /*------------------------- 1. Core Css -------------------*/
 
 .page-container {

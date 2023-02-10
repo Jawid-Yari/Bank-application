@@ -4,21 +4,21 @@
     
 <div class ="transaction">
 <form method="POST">
-    <div class="lable">
+    <div class="lable form-group">
         {{ form.csrf_token }}
-        {{ form.account_number.label }}
+        {{ form.account_number.label(class="form-control") }}
     </div>
-    <div class="value">
-        {{ form.account_number }}
+    <div class="value form-group">
+        {{ form.account_number(class="form-control") }}
     </div>
         
-    <div class="lable">
-        {{ form.amount.label }}
+    <div class="lable form-group">
+        {{ form.amount.label(class="form-control") }}
     </div>
-    <div class="value">
-        {{ form.amount }}
+    <div class="value form-group">
+        {{ form.amount (class="form-control")}}
     </div>
-    <div class="sub">
+    <div class="sub form-group">
         {{ form.submit }}
     </div>
     
