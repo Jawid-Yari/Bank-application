@@ -1,21 +1,39 @@
 {% extends "index.html" %}
 
 {% block main %}
-    <h3>Withdrawal form</h3>
+    {% include "baseForm.html" %}
+    
+<div class ="transaction">
 <form method="POST">
-    {{ form.csrf_token }}
-    {{ form.account_number.label }}{{ form.account_number }}
-    {{ form.amount.label }}{{ form.amount }}
-    {{ form.submit }}
+    <div class="lable">
+        {{ form.csrf_token }}
+        {{ form.account_number.label }}
+    </div>
+    <div class="value">
+        {{ form.account_number }}
+    </div>
+        
+    <div class="lable">
+        {{ form.amount.label }}
+    </div>
+    <div class="value">
+        {{ form.amount }}
+    </div>
+    <div class="sub">
+        {{ form.submit }}
+    </div>
+    
 </form>
 {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul class="flashes">
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+{% if messages %}
+<div id ="alert" class="alert alert-danger" role="alert"> 
+    <ul class="flashes">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
 {% endwith %}
-
+</div>
 {% endblock %}

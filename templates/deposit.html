@@ -1,13 +1,27 @@
 {% extends "index.html" %}
-
 {% block main %}
     {% include "baseForm.html" %}
-
+    
+<div class ="transaction">
 <form method="POST">
-    {{ form.csrf_token }}
-    {{ form.account_number.label }}{{ form.account_number }}
-    {{ form.amount.label }}{{ form.amount }}
-    {{ form.submit }}
+    <div class="lable">
+        {{ form.csrf_token }}
+        {{ form.account_number.label }}
+    </div>
+    <div class="value">
+        {{ form.account_number }}
+    </div>
+        
+    <div class="lable">
+        {{ form.amount.label }}
+    </div>
+    <div class="value">
+        {{ form.amount }}
+    </div>
+    <div class="sub">
+        {{ form.submit }}
+    </div>
+    
 </form>
-
+</div>
 {% endblock %}

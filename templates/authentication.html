@@ -2,12 +2,27 @@
 
 {% block main %}
     {% include "baseForm.html" %}
-
+    
+<div class ="transaction">
 <form method="POST">
-    {{ form.csrf_token }}
-    {{ form.nationalId.label }}{{ form.nationalId }}
-    {{ form.transaction_type.label }}{{ form.transaction_type }}
-    {{ form.submit }}
+    <div class="lable">
+        {{ form.csrf_token }}
+        {{ form.nationalId.label }}
+    </div>
+    <div class="value">
+        {{ form.nationalId }}
+    </div>
+        
+    <div class="lable">
+        {{ form.transaction_type.label }}
+    </div>
+    <div class="value">
+        {{ form.transaction_type }}
+    </div>
+    <div class="sub">
+        {{ form.submit }}
+    </div>
+    
 </form>
-
+</div>
 {% endblock %}
