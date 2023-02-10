@@ -1,0 +1,79 @@
+  /* Style for the container */
+  .container {
+    width: 500px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  /* Style for the header */
+  h1 {
+    font-size: 40px;
+    color: #333;
+    margin-bottom: 40px;
+  }
+
+  /* Style for the form */
+  form {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f7f7f7;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+  }
+
+  /* Style for the form elements */
+  form input[type="text"],
+  form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  /* Style for the submit button */
+  form input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #333;
+    color: #fff;
+    border: 0;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  /* Style for the error messages */
+  .error {
+    color: red;
+    margin-bottom: 20px;
+  }
+  .select {
+    width: 356px;
+    border: 0;
+    border-radius: 5px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    
+    
+  }
+@media screen and (min-width: 720px) {
+    .transaction {
+        width: 720px;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .transaction {
+        width: 1024px;
+        margin: 0 auto;
+    }
+}
+
+
+
