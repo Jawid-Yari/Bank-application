@@ -59,16 +59,14 @@ def customers():
 
     list_of_customers = Customer.query
     list_of_customers= list_of_customers.filter(
-         Customer.GivenName.like('%' + q + '%') |
-                                Customer.City.like('%' + q + '%')|
+                                                Customer.GivenName.like('%' + q + '%') |
+                                                Customer.City.like('%' + q + '%')|
                                                 Customer.Surname.like('%' + q + '%')|
-                                                                    Customer.Id.like('%' + q + '%')|
-                                                                                        Customer.Country.like('%' + q + '%')|
-                                                                                                            Customer.City.like('%' + q + '%')
-                                                                                                                        
+                                                Customer.Id.like('%' + q + '%')|
+                                                Customer.Country.like('%' + q + '%')|
+                                                Customer.City.like('%' + q + '%')
+                                                )
 
-
-    )
     if sortColumn=='id':
         if sortOrder =='asc':
             list_of_customers=list_of_customers.order_by(Customer.Id.asc())
@@ -167,9 +165,6 @@ def get_nationl_id():
                 return redirect("/withdraw")
             elif form.transaction_type.data == "transfer":
                 return redirect("/transfer")
-            else:
-                flash('Invalid choice', 'danger')
-                return redirect('/authentication')
         else:
             flash('Customer not found', 'error')
             return redirect('/authentication')
@@ -188,22 +183,15 @@ def deposit():
     customer_id = session.get('customer_id')
     if customer_id:
         accounts = db.session.query(Account).filter(Account.CustomerId == customer_id).all()
-        #for a in accounts:
-            #form.account_number.choices.append(a.Id)
         form.account_number.choices = [(account.Id) for account in accounts]
     if form.validate_on_submit():
         account = Account.query.filter_by(Id=form.account_number.data).first()
         if not account:
            flash('Account does not exist', 'danger')
            return redirect(url_for('deposit'))
-
-        if form.amount.data > 5000:
-            flash('Deposit amount should not be greater than 5000', 'danger')
-            return redirect(url_for('deposit'))
-
+        
         account.Balance += form.amount.data
         db.session.commit()
-
         save_transaction('Credit',
                     'Deposit',
                     datetime.now(),
@@ -234,21 +222,19 @@ def withdraw():
         if not account:    
             flash('Account does not exist', category='danger')
             return redirect('/withdraw')
-
+        
         if account.Balance < form.amount.data:
             flash('Too low balance', category='error')
             return redirect('/withdraw')
-
+        
         account.Balance -= form.amount.data
         db.session.commit()
-
         save_transaction('Credit',
                          'wthidraw',
                          datetime.now(),
                          form.amount.data,
                          account.Balance, 
                          account.Id )
-
         flash('Withdrawal Succesful', category='success')
         return redirect('/withdraw')
 
