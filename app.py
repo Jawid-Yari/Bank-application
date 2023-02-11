@@ -8,7 +8,7 @@ from deposit_forms import deposit_form
 from withdrawal_form import withdrawal_form
 from authenticcation_form import authentication_form
 from datetime import datetime
-
+from transfer_form import transfer_form
  
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:hej123@localhost/starbank'
@@ -187,7 +187,7 @@ def deposit():
     if form.validate_on_submit():
         account = Account.query.filter_by(Id=form.account_number.data).first()
         if not account:
-           flash('Account does not exist', 'danger')
+           flash('Account does not exist',category= 'danger')
            return redirect(url_for('deposit'))
         
         account.Balance += form.amount.data
@@ -198,7 +198,7 @@ def deposit():
                     form.amount.data,
                     account.Balance, 
                     account.Id )
-        flash('Deposit Successful', 'success')
+        flash('Deposit Successful', category='success')
         return redirect("/deposit")
         
     return render_template('deposit.html',
@@ -243,6 +243,48 @@ def withdraw():
                             )
 
 
+@app.route("/transfer", methods= ['GET','POST'])
+@auth_required()
+@roles_accepted('Admin','Cachier')
+def transfer():
+    form = transfer_form()
+    customer_id = session.get('customer_id')
+    if customer_id:
+        source_accounts= db.session.query(Account).filter(Account.CustomerId == customer_id).all()
+        form.source_account_number.choices = [(account.Id) for account in source_accounts]
+        destination_accounts = db.session.query(Account).filter(Account.CustomerId == customer_id).all()
+        form.destination_account_number.choices = [(account.Id) for account in destination_accounts]
+        if form.validate_on_submit():
+            source_account = Account.query.filter_by(Id = form.source_account_number.data).first()
+            destination_account= Account.query.filter_by(Id = form.destination_account_number.data).first()
+            if source_account and destination_account:
+                if destination_account.Balance < form.amount.data:
+                    flash('Your balance is too low!', category='error')
+                else:
+                    source_account.Balance -= form.amount.data   
+                    destination_account.Balance += form.amount.data
+                    db.session.commit()
+
+                    save_transaction('Credit',
+                                    'Transfer',
+                                    datetime.now(),
+                                    -(form.amount.data),
+                                    source_account.Balance, 
+                                    source_account.Id
+                                    )
+                    save_transaction('Credit',
+                                     'Transfer',
+                                     datetime.now(),
+                                     form.amount.data,
+                                     destination_account.Balance, 
+                                     destination_account.Id
+                                     )
+                    flash('Transfer Succesful', category='success')
+                    return redirect('/transfer')
+
+        return render_template("transfer.html",
+                                form = form
+                                )
 
 
 @app.route("/category/<id>")

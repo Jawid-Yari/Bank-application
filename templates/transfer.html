@@ -1,0 +1,44 @@
+{% extends "index.html" %}
+
+{% block main %}
+    
+<div class ="transaction">
+<form method="POST">
+    {{ form.csrf_token }}
+    <div class="lable form-group">
+        
+        {{ form.source_account_number.label(class="form-control") }}
+    </div>
+    <div class="value form-group">
+        {{ form.source_account_number(class="form-control") }}
+    </div>
+    <div class="lable form-group">
+        {{ form.destination_account_number.label(class="form-control") }}
+    </div>
+    <div class="value form-group">
+        {{ form.destination_account_number(class="form-control") }}
+    </div>
+    <div class="lable form-group">
+        {{ form.amount.label(class="form-control") }}
+    </div>
+    <div class="value form-group">
+        {{ form.amount(class="form-control") }}
+    </div>
+    <div class="sub form-group">
+        {{ form.submit(class="form-control") }}
+    </div>
+    
+</form>
+</div>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div id ="alert" class="alert alert-danger" role="alert"> 
+    <ul class="flashes">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endwith %}
+{% endblock %}
