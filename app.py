@@ -7,6 +7,7 @@ from model import db, seedData, Customer, Account, Transaction
 from deposit_forms import deposit_form
 from withdrawal_form import withdrawal_form
 from authenticcation_form import authentication_form
+from datetime import datetime
 
  
 app = Flask(__name__)
@@ -21,6 +22,13 @@ migrate = Migrate(app,db)
 
 
 
+def save_transaction(type, operation, date, amount, new_balance, account_id):
+    transaction = Transaction(Type=type, Operation=operation, 
+                            Date= date,
+                            Amount=amount, NewBalance=new_balance, 
+                            AccountId=account_id)
+    db.session.add(transaction)
+    db.session.commit()
 
 
 @app.route("/")
@@ -58,6 +66,7 @@ def customers():
                                                                                         Customer.Country.like('%' + q + '%')|
                                                                                                             Customer.City.like('%' + q + '%')
                                                                                                                         
+
 
     )
     if sortColumn=='id':
@@ -187,11 +196,20 @@ def deposit():
         if not account:
            flash('Account does not exist', 'danger')
            return redirect(url_for('deposit'))
+
         if form.amount.data > 5000:
             flash('Deposit amount should not be greater than 5000', 'danger')
             return redirect(url_for('deposit'))
+
         account.Balance += form.amount.data
         db.session.commit()
+
+        save_transaction('Credit',
+                    'Deposit',
+                    datetime.now(),
+                    form.amount.data,
+                    account.Balance, 
+                    account.Id )
         flash('Deposit Successful', 'success')
         return redirect("/deposit")
         
@@ -210,17 +228,28 @@ def withdraw():
     if customer_id:
         accounts= db.session.query(Account).filter(Account.CustomerId == customer_id).all()
         form.account_number.choices = [(account.Id) for account in accounts]
+
     if form.validate_on_submit():
         account = Account.query.filter_by(Id = form.account_number.data).first()
         if not account:    
-            flash('Account does not exist', 'danger')
+            flash('Account does not exist', category='danger')
             return redirect('/withdraw')
+
         if account.Balance < form.amount.data:
-            flash('Too low balance', 'error')
+            flash('Too low balance', category='error')
             return redirect('/withdraw')
+
         account.Balance -= form.amount.data
         db.session.commit()
-        flash('Withdrawal Succesful', 'success')
+
+        save_transaction('Credit',
+                         'wthidraw',
+                         datetime.now(),
+                         form.amount.data,
+                         account.Balance, 
+                         account.Id )
+
+        flash('Withdrawal Succesful', category='success')
         return redirect('/withdraw')
 
     return render_template('withdrawal.html',

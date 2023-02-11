@@ -80,6 +80,7 @@ tr:nth-child(even){
     
     background-image:url(/static/assets/images/author/background.jpg);
     background-size: cover;
+    height:1000px;
 
 }
 #login{
@@ -92,6 +93,7 @@ tr:nth-child(even){
     padding-top: 15%;
     margin-left: 40%;
     margin-top: 65%;
+    width: 5px;
 }
 .container{
     
@@ -109,67 +111,6 @@ tr:nth-child(even){
     
     
    
-}
-/*------------------------- transactions form -------------------*/
-div.transaction{
-    position: fixed;
-    margin-left: 35%;
-    margin-top: 8%;
-    padding-inline: 20px;
-    background-color: #F3F8FB;
-    width: 500px;
-    padding-top: 100px;
-    padding-bottom: 100px;
-    border: 0.5px solid #d0c4f3;
-    border-radius: 5px;
-    box-shadow: 5px 10px 10px 5px #92acbc;
-    
-}
-
-div.lable{
-    display: inline;
-   
-}
-div.value{
-    inline-size: 20px;
-    display: inline;
-}
-div.sub{
-  position: fixed;
-  margin-top: 20px;
-}
-div.alert{
-    
-}
-
-.form-group {
-    margin: 20px 0;
-  }
-
-label {
-    font-weight: bold;
-}
-
-input[type=text], input[type=password] {
-    
-    width: 100%;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    padding: 8px 100px;
-}
-
-input[type=submit] {
-    padding: 8px 12px;
-    background-color: #8800ff;
-    color: rgb(255, 255, 255);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-  .error {
-    color: red;
 }
 
 /*------------------------- 1. Core Css -------------------*/

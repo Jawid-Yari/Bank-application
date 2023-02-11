@@ -1,9 +1,13 @@
 {% extends "index.html" %}
-{% include "baseForm.html" %}
+
 {% block main %}
    
 
 <div class ="transaction">
+    <ul>
+        <li>- Enter National ID to authorize</li>
+        <li>- Chose transaction type</li>
+    </ul>
 <form method="POST">
     <div class="form-group" class="lable">
         {{ form.csrf_token }}
@@ -25,4 +29,15 @@
     
 </form>
 </div>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div id ="alert" class="alert alert-danger" role="alert"> 
+    <ul class="flashes">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endwith %}
 {% endblock %}

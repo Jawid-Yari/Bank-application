@@ -12,6 +12,13 @@
     margin-bottom: 40px;
   }
 
+  ul {
+    font-size: 12px;
+    color: #333;
+    margin: auto;
+    margin-bottom: 40px;
+    margin-left: 30px;
+  }
   /* Style for the form */
   form {
     width: 100%;
@@ -73,6 +80,65 @@
         width: 1024px;
         margin: 0 auto;
     }
+}
+
+/*------------------------- transactions form -------------------*/
+div.transaction{
+  position: fixed;
+  margin-left: 35%;
+  margin-top: 8%;
+  padding-inline: 20px;
+  background-color: #F3F8FB;
+  width: 500px;
+  padding-top: 100px;
+  padding-bottom: 100px;
+  border: 0.5px solid #d0c4f3;
+  border-radius: 5px;
+  box-shadow: 5px 10px 10px 5px #92acbc;
+  
+}
+
+div.lable{
+  display: inline;
+ 
+}
+div.value{
+  inline-size: 20px;
+  display: inline;
+}
+div.sub{
+position: fixed;
+margin-top: 20px;
+}
+
+.form-group {
+  margin: 20px 0;
+}
+
+label {
+  font-weight: bold;
+}
+
+input[type=text], input[type=password] {
+  
+  width: 100%;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 8px 100px;
+}
+
+input[type=submit] {
+  padding: 8px 12px;
+  background-color: #8800ff;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.error {
+  color: red;
 }
 
 

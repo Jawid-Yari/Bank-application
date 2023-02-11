@@ -1,10 +1,11 @@
-{% extends "login.html" %}
+{% extends "index.html" %}
 {% from "security/_macros.html" import render_field_with_errors, render_field, render_field_errors, render_form_errors, prop_next %}
-
-{% block content %}
+{% block title %}Login{% endblock %}
+{% block main %}
+<div id="login-background">
 {% include "security/_messages.html" %}
-<h1 id="login-text">{{ _fsdomain('Login') }}</h1>
-  <form action="{{ url_for_security('login') }}{{ prop_next() }}" method="POST" name="login_user_form" id="login">
+<h1>{{ _fsdomain('Login') }}</h1>
+  <form action="{{ url_for_security('login') }}{{ prop_next() }}" method="POST" name="login_user_form">
     {{ login_user_form.hidden_tag() }}
     {{ render_form_errors(login_user_form) }}
     {% if "email" in identity_attributes %}
@@ -45,4 +46,5 @@
     {% endfor %}
   {% endif %}
 {% include "security/_menu.html" %}
+</div>
 {% endblock %}
