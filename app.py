@@ -258,7 +258,9 @@ def transfer():
             source_account = Account.query.filter_by(Id = form.source_account_number.data).first()
             destination_account= Account.query.filter_by(Id = form.destination_account_number.data).first()
             if source_account and destination_account:
-                if destination_account.Balance < form.amount.data:
+                if source_account == destination_account:
+                    flash('Should choese diffirent account', category='error')
+                elif destination_account.Balance < form.amount.data:
                     flash('Your balance is too low!', category='error')
                 else:
                     source_account.Balance -= form.amount.data   

@@ -1,21 +1,16 @@
 {% extends "index.html" %}
+{% import "macros.html" as macros %}
 {% block main %}
     
 <div class ="transaction">
 <form method="POST">
     <div class="lable form-group">
         {{ form.csrf_token }}
-        {{ form.account_number.label(class="form-control") }}
-    </div>
-    <div class="value form-group">
-        {{ form.account_number(class="form-control") }}
+        {{ macros.render_field(form.account_number, class="form-control select") }}
     </div>
         
     <div class="lable form-group">
-        {{ form.amount.label(class="form-control") }}
-    </div>
-    <div class="value form-group">
-        {{ form.amount (class="form-control")}}
+        {{ macros.render_field(form.amount, class="form-control") }}
     </div>
     <div class="sub form-group">
         {{ form.submit }}
