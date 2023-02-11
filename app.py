@@ -59,16 +59,14 @@ def customers():
 
     list_of_customers = Customer.query
     list_of_customers= list_of_customers.filter(
-         Customer.GivenName.like('%' + q + '%') |
-                                Customer.City.like('%' + q + '%')|
+                                                Customer.GivenName.like('%' + q + '%') |
+                                                Customer.City.like('%' + q + '%')|
                                                 Customer.Surname.like('%' + q + '%')|
-                                                                    Customer.Id.like('%' + q + '%')|
-                                                                                        Customer.Country.like('%' + q + '%')|
-                                                                                                            Customer.City.like('%' + q + '%')
-                                                                                                                        
+                                                Customer.Id.like('%' + q + '%')|
+                                                Customer.Country.like('%' + q + '%')|
+                                                Customer.City.like('%' + q + '%')
+                                                )
 
-
-    )
     if sortColumn=='id':
         if sortOrder =='asc':
             list_of_customers=list_of_customers.order_by(Customer.Id.asc())
@@ -188,8 +186,6 @@ def deposit():
     customer_id = session.get('customer_id')
     if customer_id:
         accounts = db.session.query(Account).filter(Account.CustomerId == customer_id).all()
-        #for a in accounts:
-            #form.account_number.choices.append(a.Id)
         form.account_number.choices = [(account.Id) for account in accounts]
     if form.validate_on_submit():
         account = Account.query.filter_by(Id=form.account_number.data).first()
