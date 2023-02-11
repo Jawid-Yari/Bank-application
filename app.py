@@ -196,14 +196,13 @@ def deposit():
         if not account:
            flash('Account does not exist', 'danger')
            return redirect(url_for('deposit'))
-
+        
         if form.amount.data > 5000:
             flash('Deposit amount should not be greater than 5000', 'danger')
             return redirect(url_for('deposit'))
-
+        
         account.Balance += form.amount.data
         db.session.commit()
-
         save_transaction('Credit',
                     'Deposit',
                     datetime.now(),
@@ -234,21 +233,19 @@ def withdraw():
         if not account:    
             flash('Account does not exist', category='danger')
             return redirect('/withdraw')
-
+        
         if account.Balance < form.amount.data:
             flash('Too low balance', category='error')
             return redirect('/withdraw')
-
+        
         account.Balance -= form.amount.data
         db.session.commit()
-
         save_transaction('Credit',
                          'wthidraw',
                          datetime.now(),
                          form.amount.data,
                          account.Balance, 
                          account.Id )
-
         flash('Withdrawal Succesful', category='success')
         return redirect('/withdraw')
 
