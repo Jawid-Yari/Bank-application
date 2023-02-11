@@ -165,9 +165,6 @@ def get_nationl_id():
                 return redirect("/withdraw")
             elif form.transaction_type.data == "transfer":
                 return redirect("/transfer")
-            else:
-                flash('Invalid choice', 'danger')
-                return redirect('/authentication')
         else:
             flash('Customer not found', 'error')
             return redirect('/authentication')
@@ -192,10 +189,6 @@ def deposit():
         if not account:
            flash('Account does not exist', 'danger')
            return redirect(url_for('deposit'))
-        
-        if form.amount.data > 5000:
-            flash('Deposit amount should not be greater than 5000', 'danger')
-            return redirect(url_for('deposit'))
         
         account.Balance += form.amount.data
         db.session.commit()
