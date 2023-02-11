@@ -85,8 +85,8 @@
 /*------------------------- transactions form -------------------*/
 div.transaction{
   position: fixed;
-  margin-left: 35%;
-  margin-top: 8%;
+  margin-left: 25%;
+  margin-top: 0%;
   padding-inline: 20px;
   background-color: #F3F8FB;
   width: 500px;
