@@ -282,7 +282,7 @@ def transfer():
                                      destination_account.Id
                                      )
                     flash('Transfer Succesful', category='success')
-                    return redirect('/transfer')
+                    return redirect("/transfer")
 
         return render_template("transfer.html",
                                 form = form
