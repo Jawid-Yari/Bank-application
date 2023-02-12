@@ -34,6 +34,7 @@ def save_transaction(type, operation, date, amount, new_balance, account_id):
 @app.route("/")
 def home():
     account = Account.query.filter(Account.Balance)
+    top_accounts = Account.query.order_by(Account.Balance.desc()).limit(10).all()
     balance = 0
     for a in account:
         balance +=a.Balance
@@ -42,6 +43,7 @@ def home():
                             number_of_customers = Customer.query.count(),
                             total_balance = balance,
                             redirect="/",
+                            top_accounts= top_accounts,
                             activePage = "home_page"
                             )
     
@@ -216,15 +218,17 @@ def withdraw():
     if customer_id:
         accounts= db.session.query(Account).filter(Account.CustomerId == customer_id).all()
         form.account_number.choices = [(account.Id) for account in accounts]
-
-    if form.validate_on_submit():
+    onvalidate_is_ok = True
+    if request.method == 'POST':
         account = Account.query.filter_by(Id = form.account_number.data).first()
+        if account.Balance < form.amount.data:
+            form.amount.errors = form.amount.errors + ('Belopp too large',)
+            onvalidate_is_ok = False
+        
+
+    if onvalidate_is_ok and form.validate_on_submit():
         if not account:    
             flash('Account does not exist', category='danger')
-            return redirect('/withdraw')
-        
-        if account.Balance < form.amount.data:
-            flash('Too low balance', category='error')
             return redirect('/withdraw')
         
         account.Balance -= form.amount.data
@@ -236,10 +240,11 @@ def withdraw():
                          account.Balance, 
                          account.Id )
         flash('Withdrawal Succesful', category='success')
-        return redirect('/withdraw')
-
+        form.submit_success = True
+        #return redirect('/withdraw')
     return render_template('withdrawal.html',
                             form = form
+                        
                             )
 
 
