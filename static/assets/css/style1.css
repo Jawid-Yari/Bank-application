@@ -141,4 +141,25 @@ input[type=submit] {
 }
 
 
+.chart {
+  width: 800px;
+  height: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.bar {
+  display: inline-block;
+  width: 20px;
+  height: 75px;
+  margin-right: 10px;
+  background-color: blue;
+}
+
+.bar-label {
+  margin-top: 5px;
+  font-size: 12px;
+  color: white;
+}
+
 
