@@ -164,7 +164,6 @@ def get_nationl_id():
             form.nationalId.errors = form.nationalId.errors + (' Customer does not exist',)
             onvalidate_is_ok = False
     if onvalidate_is_ok and form.validate_on_submit():
-        customer = Customer.query.filter_by(NationalId=form.nationalId.data).first()
         if customer:
             session['customer_id']= customer.Id
             if form.transaction_type.data == "deposit":
