@@ -161,7 +161,7 @@ def get_nationl_id():
     if request.method == 'POST':
         customer = Customer.query.filter_by(NationalId=form.nationalId.data).first()
         if not customer:
-            form.nationalId.errors = form.nationalId.errors + (' Customer does not es',)
+            form.nationalId.errors = form.nationalId.errors + (' Customer does not exist',)
             onvalidate_is_ok = False
     if onvalidate_is_ok and form.validate_on_submit():
         customer = Customer.query.filter_by(NationalId=form.nationalId.data).first()
