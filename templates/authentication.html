@@ -23,8 +23,12 @@
     
 </form>
 </div>
-
-{% with messages = get_flashed_messages() %}
+{% if form.submit_success %}
+<div class="alert alert-success">
+    Withdraw successfull!
+  </div>
+  {% endif %}
+<!-- {% with messages = get_flashed_messages() %}
 {% if messages %}
 <div id ="alert" class="alert alert-danger" role="alert"> 
     <ul class="flashes">
@@ -34,5 +38,5 @@
     </ul>
 </div>
 {% endif %}
-{% endwith %}
+{% endwith %} -->
 {% endblock %}

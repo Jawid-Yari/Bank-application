@@ -9,7 +9,7 @@ from withdrawal_form import withdrawal_form
 from authenticcation_form import authentication_form
 from datetime import datetime
 from transfer_form import transfer_form
- 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:hej123@localhost/starbank'
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", 'Kp10kHudawanDa594-2ToBiaEnji-9OnAchoRaNaraFt')
@@ -157,7 +157,13 @@ def transactions(account_id):
 @roles_accepted("Admin", "Cashier")
 def get_nationl_id():
     form = authentication_form()
-    if form.validate_on_submit():
+    onvalidate_is_ok = True
+    if request.method == 'POST':
+        customer = Customer.query.filter_by(NationalId=form.nationalId.data).first()
+        if not customer:
+            form.nationalId.errors = form.nationalId.errors + (' Customer does not es',)
+            onvalidate_is_ok = False
+    if onvalidate_is_ok and form.validate_on_submit():
         customer = Customer.query.filter_by(NationalId=form.nationalId.data).first()
         if customer:
             session['customer_id']= customer.Id
@@ -168,7 +174,6 @@ def get_nationl_id():
             elif form.transaction_type.data == "transfer":
                 return redirect("/transfer")
         else:
-            flash('Customer not found', 'error')
             return redirect('/authentication')
             
     return render_template("authentication.html",
@@ -250,7 +255,7 @@ def withdraw():
 
 @app.route("/transfer", methods= ['GET','POST'])
 @auth_required()
-@roles_accepted('Admin','Cachier')
+@roles_accepted('Admin','Cashier')
 def transfer():
     form = transfer_form()
     customer_id = session.get('customer_id')
