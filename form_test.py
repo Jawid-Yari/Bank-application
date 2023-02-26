@@ -4,6 +4,7 @@ from app import app
 from model import db, Customer, User,Role, Account
 from flask_security import Security,SQLAlchemyUserDatastore, hash_password
 from sqlalchemy import create_engine
+from datetime import datetime, date
 
 
 def set_current_user(app, ds, email):
@@ -22,17 +23,17 @@ def set_current_user(app, ds, email):
 init = False
 
 class FormsTestCases(unittest.TestCase):
-    # def __init__(self, *args, **kwargs):
-    #     super(FormsTestCases, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(FormsTestCases, self).__init__(*args, **kwargs)
     def tearDown(self):
         self.ctx.pop()
     def setUp(self):
         self.ctx = app.app_context()
         self.ctx.push()
-        #self.client = app.test_client()
+        self.client = app.test_client()
         app.config["SERVER_NAME"] = "stefan.se"
         app.config['WTF_CSRF_ENABLED'] = False
-        app.config['WTF_CSRF_METHODS'] = []  # This is the magic
+        app.config['WTF_CSRF_METHODS'] = []
         app.config['TESTING'] = True
         app.config['LOGIN_DISABLED'] = True
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://'
@@ -53,55 +54,78 @@ class FormsTestCases(unittest.TestCase):
    
 
 
-    def test_when_withdrawing_more_than_balance_should_show_errormessage(self):
-        # arrangera världen så att kund med id 1 har amount 100
-        # ta ut 200
-        # kolla i rerultat HTML = "Belopp to large"
-
+    def test_when_authorizing_customer_using_national_ID_in_case_customer_does_not_exist_tell_custome_does_not_exist(self):
         app.security.datastore.create_role(name="Admin")
         app.security.datastore.create_user(email="unittest@me.com", password=hash_password("password"), roles=["Admin"])
         app.security.datastore.commit()
 
         set_current_user(app, app.security.datastore, "unittest@me.com")
 
-
-        customer = Account()
-        customer.Name = "Stefan"
-        customer.TelephoneCountryCode = "1223"
-        customer.Telephone = "12343"
-        customer.City = "Test"
-        customer.Amount = 100
+        account = Account()
+        account.Id = 1
+        account.AccountType = 'checking'
+        account.Created = datetime(2022, 2, 28, 12, 30, 0)
+        account.Balance = 100
+        account.CustomerId = 1
+        customer = Customer()
+        customer.GivenName = "Stefan"
+        customer.Surname = "Holmberg"
+        customer.Streetaddress = "Karlavägen12"
+        customer.City = "Stockholm"
+        customer.Zipcode = 73335
+        customer.Country = "Sweden"
+        customer.CountryCode = "+46"
+        customer.Birthday = date(1990, 2, 28)
+        customer.NationalId ='1234567890'
+        customer.TelephoneCountryCode=1
+        customer.Telephone='555-555-5555'
+        customer.EmailAddress='unittest@gmail.com'
+        db.session.add(account)
         db.session.add(customer)
         db.session.commit()
 
         test_client = app.test_client()
-        user = User.query.get(1)
+        with test_client:
+            url = '/authentication' 
+            response = test_client.post(url, data={"nationalId":'1234567892', 
+                                                    "transaction_type":'Withdraw',},
+                                                    headers={app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"]: "token"}
+                                        )
+            
+
+            s = response.data.decode("utf-8") 
+            ok = 'Customer does not exist' in s
+            self.assertTrue(ok)
+
+
+
+    def test_when_withdraw_more_than_account_balance_should_show_error(self):
+        app.security.datastore.commit()
+        test_client = app.test_client()
         with test_client:
             url = '/withdraw' 
-            response = test_client.post(url, data={ "amount":"200"},  headers={app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"]: "token"} )
+            response = test_client.post(url, data={"account_number":"1", 
+                                                    "amount":1000},
+                                                    headers={app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"]: "token"}
+                                        )
             s = response.data.decode("utf-8") 
             ok = 'Belopp too large' in s
             self.assertTrue(ok)
 
 
-    # def test_when_creating_new_should_validate_name_ends_with_se(self):
-    #     test_client = app.test_client()
-    #     with test_client:
-    #         url = '/newcustomer'
-    #         response = test_client.post(url, data={ "name":"Kalle", "city":"Teststad", "age":"31", "countryCode":"SE", "Amount":"0" }, headers={app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"]: "token"} )
-    #         s = response.data.decode("utf-8") 
-    #         ok = 'Måste sluta på .se dummer' in s
-    #         self.assertTrue(ok)
-
-    # def test_when_creating_new_should_be_ok_when_name_is_ok(self):
-    #     test_client = app.test_client()
-    #     with test_client:
-    #         url = '/newcustomer'
-    #         response = test_client.post(url, data={ "name":"Kalle.se", "city":"Teststad", "age":"12", "countryCode":"SE", "Amount":"0" },headers={app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"]: "token"} )
-    #         self.assertEqual('302 FOUND', response.status)
-
-
-
+    def test_when_transfer_more_than_account_balance_should_show_error(self):
+        app.security.datastore.commit()
+        test_client = app.test_client()
+        with test_client:
+            url = '/transfer' 
+            response = test_client.post(url, data={"source_account_number":"1",
+                                                   "destination_account_number":"1", 
+                                                    "amount":1000},
+                                                    headers={app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"]: "token"}
+                                        )
+            s = response.data.decode("utf-8") 
+            ok = 'Not enough balance in your account!' in s
+            self.assertTrue(ok)
 
 if __name__ == "__main__":
     unittest.main()

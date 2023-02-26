@@ -9,6 +9,9 @@ from withdrawal_form import withdrawal_form
 from authenticcation_form import authentication_form
 from datetime import datetime
 from transfer_form import transfer_form
+import requests
+import time
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:hej123@localhost/starbank'
@@ -33,6 +36,7 @@ def save_transaction(type, operation, date, amount, new_balance, account_id):
 
 @app.route("/")
 def home():
+
     account = Account.query.filter(Account.Balance)
     top_accounts = Account.query.order_by(Account.Balance.desc()).limit(10).all()
     balance = 0
@@ -161,7 +165,7 @@ def get_nationl_id():
     if request.method == 'POST':
         customer = Customer.query.filter_by(NationalId=form.nationalId.data).first()
         if not customer:
-            form.nationalId.errors = form.nationalId.errors + (' Customer does not exist',)
+            form.nationalId.errors = form.nationalId.errors + ('Customer does not exist',)
             onvalidate_is_ok = False
     if onvalidate_is_ok and form.validate_on_submit():
         if customer:
@@ -190,7 +194,14 @@ def deposit():
     if customer_id:
         accounts = db.session.query(Account).filter(Account.CustomerId == customer_id).all()
         form.account_number.choices = [(account.Id) for account in accounts]
-    if form.validate_on_submit():
+    onvalidate_is_ok = True
+    if request.method == 'POST':
+        account = Account.query.filter_by(Id = form.account_number.data).first()
+        if form.amount.data> 50000:
+            form.amount.errors = form.amount.errors + ('You can\'t deposit more than 50000 at a time',)
+            onvalidate_is_ok = False
+
+    if onvalidate_is_ok and form.validate_on_submit():
         account = Account.query.filter_by(Id=form.account_number.data).first()
         if not account:
            flash('Account does not exist',category= 'danger')
@@ -212,7 +223,6 @@ def deposit():
                             )
 
 
-
 @app.route("/withdraw", methods=['GET', 'POST'])
 @auth_required()
 @roles_accepted("Admin", "Cashier")
@@ -231,10 +241,6 @@ def withdraw():
         
 
     if onvalidate_is_ok and form.validate_on_submit():
-        if not account:    
-            flash('Account does not exist', category='danger')
-            return redirect('/withdraw')
-        
         account.Balance -= form.amount.data
         db.session.commit()
         save_transaction('Credit',
@@ -263,39 +269,48 @@ def transfer():
         form.source_account_number.choices = [(account.Id) for account in source_accounts]
         destination_accounts = db.session.query(Account).filter(Account.CustomerId == customer_id).all()
         form.destination_account_number.choices = [(account.Id) for account in destination_accounts]
-        if form.validate_on_submit():
-            source_account = Account.query.filter_by(Id = form.source_account_number.data).first()
-            destination_account= Account.query.filter_by(Id = form.destination_account_number.data).first()
-            if source_account and destination_account:
-                if source_account == destination_account:
-                    flash('Should choese diffirent account', category='error')
-                elif destination_account.Balance < form.amount.data:
-                    flash('Your balance is too low!', category='error')
-                else:
-                    source_account.Balance -= form.amount.data   
-                    destination_account.Balance += form.amount.data
-                    db.session.commit()
 
-                    save_transaction('Credit',
+    onvalidate_is_ok = True
+    if request.method == 'POST':
+        source_account = Account.query.filter_by(Id = form.source_account_number.data).first() 
+        if source_account.Balance < form.amount.data:
+            form.amount.errors = form.amount.errors + ('Not enough balance in your account!',)
+            onvalidate_is_ok = False
+
+
+    if onvalidate_is_ok and form.validate_on_submit():
+        source_account = Account.query.filter_by(Id = form.source_account_number.data).first()
+        destination_account= Account.query.filter_by(Id = form.destination_account_number.data).first()
+        if source_account and destination_account:
+            if source_account == destination_account:
+                flash('Should choese diffirent account', category='error')
+            elif destination_account.Balance < form.amount.data:
+                flash('Your balance is too low!', category='error')
+            else:
+                source_account.Balance -= form.amount.data   
+                destination_account.Balance += form.amount.data
+                db.session.commit()
+
+                save_transaction('Credit',
+                                'Transfer',
+                                datetime.now(),
+                                -(form.amount.data),
+                                source_account.Balance, 
+                                source_account.Id
+                                )
+                save_transaction('Credit',
                                     'Transfer',
                                     datetime.now(),
-                                    -(form.amount.data),
-                                    source_account.Balance, 
-                                    source_account.Id
+                                    form.amount.data,
+                                    destination_account.Balance, 
+                                    destination_account.Id
                                     )
-                    save_transaction('Credit',
-                                     'Transfer',
-                                     datetime.now(),
-                                     form.amount.data,
-                                     destination_account.Balance, 
-                                     destination_account.Id
-                                     )
-                    flash('Transfer Succesful', category='success')
-                    return redirect("/transfer")
+                flash('Transfer Succesful', category='success')
+                return redirect("/transfer")
 
-        return render_template("transfer.html",
-                                form = form
-                                )
+    return render_template("transfer.html",
+                            form = form
+                            )
 
 
 @app.route("/category/<id>")

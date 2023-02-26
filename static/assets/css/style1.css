@@ -164,13 +164,9 @@ input[type=submit] {
 
 #login-background h1{
   text-align: center;
-  color: rgb(255, 255, 255);
-  background-size: cover;
-  background-color: #353434;
-  padding-bottom: 10px ;
-  
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
+  color: rgb(240, 191, 32);
+  margin-bottom: 0px;
+
 }
 
 #email{
@@ -193,4 +189,26 @@ form [name="login_user_form"]{
   background-color: #f7f7f7;
   border: 1px solid #e5e5e5;
   border-radius: 10px;
+}
+
+.fa{
+  color: mediumpurple;
+}
+.fa-exchange:before {
+  color: mediumpurple;
+  
+  
+}
+
+.fa-users:before{
+  color: mediumpurple;
+  margin-right: 10px;
+}
+.fa-university::before{
+  color: mediumpurple;
+}
+.fs-error-msg{
+color: rgb(202, 23, 23);
+text-align: center;
+
 }
