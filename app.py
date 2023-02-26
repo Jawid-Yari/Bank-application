@@ -313,13 +313,6 @@ def transfer():
                             )
 
 
-@app.route("/category/<id>")
-def category(id):
-    products = Product.query.all()
-    return render_template("category.html", products=products
-                            
-            )
-
 @app.route("/tables")
 def tables():
     return render_template("tables.html")
