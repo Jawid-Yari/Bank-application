@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, redirect, session, url_for,flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, upgrade
-from flask_security import roles_accepted, auth_required, logout_user
+from flask_security import roles_accepted, auth_required, logout_user, SQLAlchemyUserDatastore, Security
 import os
-from model import db, seedData, Customer, Account, Transaction
+from model import db, seedData, Customer, Account, Transaction, fsqla
 from deposit_forms import deposit_form
 from withdrawal_form import withdrawal_form
 from authenticcation_form import authentication_form
@@ -24,6 +24,21 @@ db.init_app(app)
 migrate = Migrate(app,db)
 
 
+fsqla.FsModels.set_db_info(db)
+
+class Role(db.Model, fsqla.FsRoleMixin):
+    pass
+    # id = db.Column(db.Integer, primary_key = True)
+    # name = db.Column(db.String(100), unique = True) 
+
+class User(db.Model, fsqla.FsUserMixin):
+    # id = db.Column(db.Integer, primary_key = True)
+    # email = db.Column(db.String(100), unique= True)
+    # password= db.Column(db.String(255))
+    # active = db.Column(db.Boolean)
+    pass
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+app.security = Security(app, user_datastore)
 
 def save_transaction(type, operation, date, amount, new_balance, account_id):
     transaction = Transaction(Type=type, Operation=operation, 
@@ -197,8 +212,8 @@ def deposit():
     onvalidate_is_ok = True
     if request.method == 'POST':
         account = Account.query.filter_by(Id = form.account_number.data).first()
-        if form.amount.data > 50000 or form.amount.data < 0:
-            form.amount.errors = form.amount.errors + ('You can\'t deposit less than 0 and than 50000 at a time',)
+        if form.amount.data < 0 or form.amount.data > 50000:
+            form.amount.errors = form.amount.errors + ('You cant deposit less than 0',)
             onvalidate_is_ok = False
 
     if onvalidate_is_ok and form.validate_on_submit():
@@ -235,7 +250,7 @@ def withdraw():
     onvalidate_is_ok = True
     if request.method == 'POST':
         account = Account.query.filter_by(Id = form.account_number.data).first()
-        if account.Balance < form.amount.data:
+        if account.Balance < form.amount.data or form.amount.data < 0:
             form.amount.errors = form.amount.errors + ('Belopp too large',)
             onvalidate_is_ok = False
         
@@ -273,7 +288,7 @@ def transfer():
     onvalidate_is_ok = True
     if request.method == 'POST':
         source_account = Account.query.filter_by(Id = form.source_account_number.data).first() 
-        if source_account.Balance < form.amount.data:
+        if source_account.Balance < form.amount.data or form.amount.data < 0:
             form.amount.errors = form.amount.errors + ('Not enough balance in your account!',)
             onvalidate_is_ok = False
 

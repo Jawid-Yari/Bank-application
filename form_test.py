@@ -1,7 +1,7 @@
 import unittest
 from flask import Flask, render_template, request, url_for, redirect
-from app import app
-from model import db, Customer, User,Role, Account
+from app import app, User,Role
+from model import db, Customer, Account
 from flask_security import Security,SQLAlchemyUserDatastore, hash_password
 from sqlalchemy import create_engine
 from datetime import datetime, date
@@ -99,8 +99,21 @@ class FormsTestCases(unittest.TestCase):
 
 
 
+    def test_when_withdraw_negative_should_show_error(self):
+        test_client = app.test_client()
+        with test_client:
+            url = '/withdraw' 
+            response = test_client.post(url, data={"account_number":"1", 
+                                                    "amount":-1000},
+                                                    headers={app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"]: "token"}
+                                        )
+            s = response.data.decode("utf-8") 
+            ok = 'Belopp too large' in s
+            self.assertTrue(ok)
+
+
+
     def test_when_withdraw_more_than_account_balance_should_show_error(self):
-        app.security.datastore.commit()
         test_client = app.test_client()
         with test_client:
             url = '/withdraw' 
@@ -113,15 +126,13 @@ class FormsTestCases(unittest.TestCase):
             self.assertTrue(ok)
 
 
-
     def test_when_transfer_more_than_account_balance_should_show_error(self):
-        app.security.datastore.commit()
         test_client = app.test_client()
         with test_client:
             url = '/transfer' 
             response = test_client.post(url, data={"source_account_number":"1",
-                                                   "destination_account_number":"1", 
-                                                    "amount":1000},
+                                                   "destination_account_number":"2", 
+                                                    "amount":-1000},
                                                     headers={app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"]: "token"}
                                         )
             s = response.data.decode("utf-8") 
@@ -131,7 +142,19 @@ class FormsTestCases(unittest.TestCase):
 
 
     def test_when_deposit_less_than_0_or_more_than_50000_at_a_time_should_show_error(self):
-        app.security.datastore.commit()
+        test_client = app.test_client()
+        with test_client:
+            url = '/deposit' 
+            response = test_client.post(url, data={"account_number":"1", 
+                                                    "amount":-1},
+                                                    headers={app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"]: "token"}
+                                        )
+            s = response.data.decode("utf-8") 
+            ok = 'You cant deposit less than 0' in s
+            self.assertTrue(ok)
+
+
+    def test_when_deposit_more_than_50000_at_a_time_should_show_error(self):
         test_client = app.test_client()
         with test_client:
             url = '/deposit' 
@@ -140,9 +163,8 @@ class FormsTestCases(unittest.TestCase):
                                                     headers={app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"]: "token"}
                                         )
             s = response.data.decode("utf-8") 
-            ok = 'You can\'t deposit less than 0 and than 50000 at a time' in s
+            ok = 'You cant deposit less than 0' in s
             self.assertTrue(ok)
-
 
 
 
