@@ -108,7 +108,7 @@ class FormsTestCases(unittest.TestCase):
                                                     headers={app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"]: "token"}
                                         )
             s = response.data.decode("utf-8") 
-            ok = 'Belopp too large' in s
+            ok = 'Belopp too large or below 0' in s
             self.assertTrue(ok)
 
 
@@ -122,7 +122,7 @@ class FormsTestCases(unittest.TestCase):
                                                     headers={app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"]: "token"}
                                         )
             s = response.data.decode("utf-8") 
-            ok = 'Belopp too large' in s
+            ok = 'Belopp too large or below 0' in s
             self.assertTrue(ok)
 
 
@@ -136,7 +136,7 @@ class FormsTestCases(unittest.TestCase):
                                                     headers={app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"]: "token"}
                                         )
             s = response.data.decode("utf-8") 
-            ok = 'Not enough balance in your account!' in s
+            ok = 'OBS! not enough balance in your account or you try to transfer below 0' in s
             self.assertTrue(ok)
 
 

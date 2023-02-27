@@ -14,7 +14,7 @@ import time
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:hej123@localhost/starbank'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://nordiscbank:Hejsan123@nordicbank.mysql.database.azure.com/bank'
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", 'Kp10kHudawanDa594-2ToBiaEnji-9OnAchoRaNaraFt')
 app.config['SECURITY_PASSWORD_SALT'] = os.environ.get("SECURITY_PASSWORD_SALT", '146585145368132386173505678016728509634')
 app.config["REMEMBER_COOKIE_SAMESITE"] = "strict"
@@ -28,14 +28,10 @@ fsqla.FsModels.set_db_info(db)
 
 class Role(db.Model, fsqla.FsRoleMixin):
     pass
-    # id = db.Column(db.Integer, primary_key = True)
-    # name = db.Column(db.String(100), unique = True) 
+
 
 class User(db.Model, fsqla.FsUserMixin):
-    # id = db.Column(db.Integer, primary_key = True)
-    # email = db.Column(db.String(100), unique= True)
-    # password= db.Column(db.String(255))
-    # active = db.Column(db.Boolean)
+
     pass
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 app.security = Security(app, user_datastore)
@@ -251,7 +247,7 @@ def withdraw():
     if request.method == 'POST':
         account = Account.query.filter_by(Id = form.account_number.data).first()
         if account.Balance < form.amount.data or form.amount.data < 0:
-            form.amount.errors = form.amount.errors + ('Belopp too large',)
+            form.amount.errors = form.amount.errors + ('Belopp too large or below 0',)
             onvalidate_is_ok = False
         
 
@@ -289,7 +285,7 @@ def transfer():
     if request.method == 'POST':
         source_account = Account.query.filter_by(Id = form.source_account_number.data).first() 
         if source_account.Balance < form.amount.data or form.amount.data < 0:
-            form.amount.errors = form.amount.errors + ('Not enough balance in your account!',)
+            form.amount.errors = form.amount.errors + ('OBS! not enough balance in your account or you try to transfer below 0',)
             onvalidate_is_ok = False
 
 

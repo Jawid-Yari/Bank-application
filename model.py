@@ -9,22 +9,6 @@ from datetime import timedelta
 
 db = SQLAlchemy()
 
-# fsqla.FsModels.set_db_info(db)
-
-# class Role(db.Model, fsqla.FsRoleMixin):
-#     pass
-#     # id = db.Column(db.Integer, primary_key = True)
-#     # name = db.Column(db.String(100), unique = True) 
-
-# class User(db.Model, fsqla.FsUserMixin):
-#     # id = db.Column(db.Integer, primary_key = True)
-#     # email = db.Column(db.String(100), unique= True)
-#     # password= db.Column(db.String(255))
-#     # active = db.Column(db.Boolean)
-#     pass
-# user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-
-
 class Customer(db.Model):
     __tablename__= "Customers"
     Id = db.Column(db.Integer, primary_key=True)
@@ -83,7 +67,7 @@ def seedData(app, db):
     app.security.datastore.db.session.commit()
 
     antal =  Customer.query.count()
-    while antal < 1000:
+    while antal < 100:
         customer = Customer()
         
         customer.GivenName, customer.Surname = barnum.create_name()
