@@ -113,6 +113,7 @@ class FormsTestCases(unittest.TestCase):
             self.assertTrue(ok)
 
 
+
     def test_when_transfer_more_than_account_balance_should_show_error(self):
         app.security.datastore.commit()
         test_client = app.test_client()
@@ -126,6 +127,27 @@ class FormsTestCases(unittest.TestCase):
             s = response.data.decode("utf-8") 
             ok = 'Not enough balance in your account!' in s
             self.assertTrue(ok)
+
+
+
+    def test_when_deposit_less_than_0_or_more_than_50000_at_a_time_should_show_error(self):
+        app.security.datastore.commit()
+        test_client = app.test_client()
+        with test_client:
+            url = '/deposit' 
+            response = test_client.post(url, data={"account_number":"1", 
+                                                    "amount":60000},
+                                                    headers={app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"]: "token"}
+                                        )
+            s = response.data.decode("utf-8") 
+            ok = 'You can\'t deposit less than 0 and than 50000 at a time' in s
+            self.assertTrue(ok)
+
+
+
+
+
+
 
 if __name__ == "__main__":
     unittest.main()

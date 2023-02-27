@@ -197,8 +197,8 @@ def deposit():
     onvalidate_is_ok = True
     if request.method == 'POST':
         account = Account.query.filter_by(Id = form.account_number.data).first()
-        if form.amount.data> 50000:
-            form.amount.errors = form.amount.errors + ('You can\'t deposit more than 50000 at a time',)
+        if form.amount.data > 50000 or form.amount.data < 0:
+            form.amount.errors = form.amount.errors + ('You can\'t deposit less than 0 and than 50000 at a time',)
             onvalidate_is_ok = False
 
     if onvalidate_is_ok and form.validate_on_submit():
