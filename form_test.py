@@ -54,7 +54,7 @@ class FormsTestCases(unittest.TestCase):
    
 
 
-    def test_when_authorizing_customer_using_national_ID_in_case_customer_does_not_exist_tell_custome_does_not_exist(self):
+    def test_when_authorizing_customer_using_national_ID_in_case_customer_does_not_exist_show_error(self):
         app.security.datastore.create_role(name="Admin")
         app.security.datastore.create_user(email="unittest@me.com", password=hash_password("password"), roles=["Admin"])
         app.security.datastore.commit()
@@ -104,7 +104,7 @@ class FormsTestCases(unittest.TestCase):
         with test_client:
             url = '/withdraw' 
             response = test_client.post(url, data={"account_number":"1", 
-                                                    "amount":-1000},
+                                                    "amount":-1},
                                                     headers={app.config["SECURITY_TOKEN_AUTHENTICATION_HEADER"]: "token"}
                                         )
             s = response.data.decode("utf-8") 
