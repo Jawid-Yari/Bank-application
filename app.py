@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, session, url_for,flash
+from mailbox import Message
+from flask import Flask, jsonify, render_template, request, redirect, session, url_for,flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, upgrade
 from flask_security import roles_accepted, auth_required, logout_user, SQLAlchemyUserDatastore, Security
@@ -11,6 +12,9 @@ from datetime import datetime
 from transfer_form import transfer_form
 import requests
 import time
+from flask_mail import Mail
+from forgot_password import ForgotPasswordForm,ResetPasswordForm
+from flask_security import hash_password
 
 
 app = Flask(__name__)
@@ -19,6 +23,13 @@ app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", 'Kp10kHudawanDa594-2ToBi
 app.config['SECURITY_PASSWORD_SALT'] = os.environ.get("SECURITY_PASSWORD_SALT", '146585145368132386173505678016728509634')
 app.config["REMEMBER_COOKIE_SAMESITE"] = "strict"
 app.config["SESSION_COOKIE_SAMESITE"] = "strict"
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'jawidyari123@gmail.com' # replace with your email address
+app.config['MAIL_PASSWORD'] = 'Hejsan123#' # replace with your email password
+app.config['MAIL_DEFAULT_SENDER'] = 'jawidyari123@gmail.com' # replace with your email address
+mail = Mail(app)
 db.app = app
 db.init_app(app)
 migrate = Migrate(app,db)
@@ -35,6 +46,7 @@ class User(db.Model, fsqla.FsUserMixin):
     pass
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 app.security = Security(app, user_datastore)
+
 
 def save_transaction(type, operation, date, amount, new_balance, account_id):
     transaction = Transaction(Type=type, Operation=operation, 
@@ -154,17 +166,26 @@ def customer(customer_id):
 @auth_required()
 @roles_accepted("Admin", "Cashier")
 def transactions(account_id):
-    transactions = db.session.query(Transaction).filter(Transaction.AccountId == account_id).all()
+    page =int(request.args.get('page', 1))
+    transactions_query = db.session.query(Transaction).filter(Transaction.AccountId == account_id)
     account = db.session.query(Account).filter(Account.Id == account_id).first()
+    paginationObject=transactions_query.paginate(page = page,per_page=20, error_out = False)
     return render_template("account-history.html",
-                           transactions= transactions,
+                           transactions= paginationObject,
                            account = account,
                            redirect="/account-history",
                            activePage = 'account-history'
 
                             )
 
-
+@app.route('/account-history/<int:account_id>/transactions', methods=['GET'])
+def more_transactions(account_id):
+    offset = request.args.get('offset', type=int)
+    limit = request.args.get('limit', type=int)
+    transactions = db.session.query(Transaction)\
+        .filter(Transaction.AccountId == account_id)\
+        .limit(limit).offset(offset).all()
+    return jsonify(transactions=[t.to_dict() for t in transactions])
 
 
 @app.route("/authentication",  methods=['GET', 'POST'])
@@ -333,6 +354,43 @@ def tables():
 def logout():
     logout_user()
     return redirect("/")
+
+
+@app.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    form = ForgotPasswordForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        user = user_datastore.find_user(email)
+        if user:
+            token = user_datastore.generate_reset_password_token(user)
+            reset_link = url_for('reset_password', token=token, _external=True)
+            msg = Message(subject=app.config['SECURITY_EMAIL_SUBJECT_PASSWORD_RESET'],
+                          recipients=[user.email])
+            msg.body = render_template('security/reset_password_instructions.txt',
+                                        reset_link=reset_link, user=user)
+            mail.send(msg)
+            return redirect(url_for('security.login'))
+    return render_template('security/forgot_password.html', form=form)
+
+
+
+@app.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    user = user_datastore.get_user_from_reset_password_token(token)
+    if not user:
+        flash('Invalid or expired token', 'error')
+        return redirect(url_for('security.login'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user_datastore.reset_password_token_used(user)
+        user_datastore.update_user(user, password= hash_password(form.password.data))
+        db.session.commit()
+        flash('Your password has been reset.', 'success')
+        return redirect(url_for('security.login'))
+    return render_template('security/reset_password.html', form=form)
+
+
 
 if __name__  == "__main__":
     with app.app_context():

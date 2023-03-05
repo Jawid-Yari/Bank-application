@@ -31,6 +31,7 @@
         <input id="wan_signin" name="wan_signin" type="submit" value="{{ _fsdomain('Sign in with WebAuthn') }}" 
           formaction="{{ url_for_security('wan_signin') }}{{ prop_next() }}">
       </form>
+      
     </div>
   {% endif %}
   {% if security.oauthglue %}
@@ -42,6 +43,7 @@
           <input id={{ provider }} name={{ provider }} type="submit" value="{{ _fsdomain('Sign in with ')~provider }}"
             formaction="{{ url_for_security('oauthstart', name=provider) }}{{ prop_next() }}">
         </form>
+        
       </div>
     {% endfor %}
   {% endif %}
