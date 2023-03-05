@@ -169,7 +169,7 @@ def transactions(account_id):
     page =int(request.args.get('page', 1))
     transactions_query = db.session.query(Transaction).filter(Transaction.AccountId == account_id)
     account = db.session.query(Account).filter(Account.Id == account_id).first()
-    paginationObject=transactions_query.paginate(page = page,per_page=20, error_out = False)
+    paginationObject=transactions_query.paginate(page = page, error_out = False)
     return render_template("account-history.html",
                            transactions= paginationObject,
                            account = account,

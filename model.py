@@ -49,6 +49,10 @@ class Transaction(db.Model):
     NewBalance = db.Column(db.Integer, unique=False, nullable=False)
     AccountId = db.Column(db.Integer, db.ForeignKey('Accounts.Id'), nullable=False)
 
+    def to_dict(self):
+        return {'id': self.Id, 'accountId': self.AccountId, 'date': str(self.Date),
+                'operation': self.Operation, 'amount': self.Amount}
+
 
 
 def seedData(app, db):
