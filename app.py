@@ -8,6 +8,7 @@ from model import db, seedData, Customer, Account, Transaction, fsqla
 from deposit_forms import deposit_form
 from withdrawal_form import withdrawal_form
 from authenticcation_form import authentication_form
+from new_customer import create_new_customer
 from datetime import datetime
 from transfer_form import transfer_form
 import requests
@@ -19,6 +20,7 @@ from flask_security import hash_password
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://nordiscbank:Hejsan123@nordicbank.mysql.database.azure.com/bank'
+
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", 'Kp10kHudawanDa594-2ToBiaEnji-9OnAchoRaNaraFt')
 app.config['SECURITY_PASSWORD_SALT'] = os.environ.get("SECURITY_PASSWORD_SALT", '146585145368132386173505678016728509634')
 app.config["REMEMBER_COOKIE_SAMESITE"] = "strict"
@@ -389,6 +391,32 @@ def reset_password(token):
         flash('Your password has been reset.', 'success')
         return redirect(url_for('security.login'))
     return render_template('security/reset_password.html', form=form)
+
+
+
+@app.route("/createCustomer", methods= ['GET', 'POST'])
+@auth_required()
+@roles_accepted("Admin", "Cashier")
+def create_customer():
+    form = create_new_customer()
+    if form.validate_on_submit():
+        customer = Customer()
+        customer.GivenName = form.GivenName.data
+        customer.Surname = form.Surname.data
+        customer.City = form.City.data
+        customer.Country = form.Country.data
+        customer.NationalId = form.NationalId.data
+        customer.Birthday = form.Birthday.data
+        customer.Streetaddress = form.Streetaddress.data
+        customer.CountryCode= form.CountryCode.data
+        customer.Zipcode= form.Zipcode.data
+        customer.EmailAddress = form.EmailAddress.data
+        customer.TelephoneCountryCode = form.TelephoneCountryCode.data
+        customer.Telephone= form.Telephone.data
+        db.session.add(customer)
+        db.session.commit()
+        return redirect('/createCustomer')
+    return render_template('new_customer.html', form = form)
 
 
 

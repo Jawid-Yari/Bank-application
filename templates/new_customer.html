@@ -1,0 +1,54 @@
+{% extends "index.html" %}
+{% import "macros.html" as macros %}
+{% block main %}
+    
+<div class ="creat-customer">
+<form method="post">
+    <div class="customer">
+        {{ macros.render_field(form.GivenName, class="form-control select") }}
+    </div>
+    <div class="customer">
+        {{ macros.render_field(form.Surname, class="form-control select") }}
+    </div>
+    <div class="customer">
+        {{ macros.render_field(form.City, class="form-control") }} 
+    </div>
+    <div class="customer">
+        {{ macros.render_field(form.Country, class="form-control select") }}
+    </div>
+    <div class="customer">
+        {{ macros.render_field(form.NationalId, class="form-control select") }}
+    </div>
+    <div class="customer">
+        {{ macros.render_field(form.Birthday, class="form-control select") }}
+    </div>
+    <div class="customer">
+        {{ macros.render_field(form.Streetaddress, class="form-control select") }}
+    </div>
+    <div class="lcustomer">
+        {{ macros.render_field(form.CountryCode, class="form-control select") }}
+    </div>
+    <div class="customer">
+        {{ macros.render_field(form.Zipcode, class="form-control select") }}
+    </div>
+    <div class="customer">
+        {{ macros.render_field(form.EmailAddress, class="form-control select") }}
+    </div>
+    <div class="customer">
+        {{ macros.render_field(form.TelephoneCountryCode, class="form-control select") }}
+    </div>
+    <div class="customer">
+        {{ macros.render_field(form.Telephone, class="form-control select") }}
+    </div>
+    <div class="customer">
+        {{ form.submit(class="form-control") }}
+    </div>
+</form>
+</div>
+
+{% if form.submit_success %}
+<div class="alert alert-success">
+    Cusmoter Created!
+  </div>
+  {% endif %}
+{% endblock %}
