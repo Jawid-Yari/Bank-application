@@ -9,6 +9,7 @@ from deposit_forms import deposit_form
 from withdrawal_form import withdrawal_form
 from authenticcation_form import authentication_form
 from new_customer import create_new_customer
+from get_profile_form import get_customer_profile
 from datetime import datetime
 from transfer_form import transfer_form
 import requests
@@ -19,8 +20,8 @@ from flask_security import hash_password
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://nordiscbank:Hejsan123@nordicbank.mysql.database.azure.com/bank'
-
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://nordiscbank:Hejsan123@nordicbank.mysql.database.azure.com/bank'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:hej123@localhost/starbank'
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", 'Kp10kHudawanDa594-2ToBiaEnji-9OnAchoRaNaraFt')
 app.config['SECURITY_PASSWORD_SALT'] = os.environ.get("SECURITY_PASSWORD_SALT", '146585145368132386173505678016728509634')
 app.config["REMEMBER_COOKIE_SAMESITE"] = "strict"
@@ -163,6 +164,25 @@ def customer(customer_id):
                            redirect = "/customer",
                            activePage = 'profile'
                             )
+
+@app.route("/get_customer_profile", methods=['GET', 'POST'])
+@auth_required()
+@roles_accepted("Admin", "Cashier")
+def customer_profile():
+    form = get_customer_profile()
+    if form.validate_on_submit():
+        customer = db.session.query(Customer).filter(Customer.Id == form.customer_id.data).first()
+        accounts = db.session.query(Account).filter(Account.CustomerId == form.customer_id.data).all()
+        total_balance = sum([account.Balance for account in accounts])
+        return render_template("customer_profile.html",
+                            customer = customer,
+                            accounts = accounts,
+                            total_balance = total_balance,
+                            redirect = "/customer",
+                            activePage = 'profile'
+                                )
+    return render_template('search_profile.html', form = form)
+
 
 @app.route("/account-history/<int:account_id>")
 @auth_required()

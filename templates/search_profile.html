@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+{% import "macros.html" as macros %}
+{% block main %}
+    
+<div class ="transaction">
+<form method="post">
+    <div class="lable form-group">
+        {{ macros.render_field(form.customer_id, class="form-control select") }}
+    </div>
+    <div class="sub form-group">
+        {{ form.search(class="form-control") }}
+    </div>
+</form>
+</div>
+{% endblock %}
