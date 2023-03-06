@@ -165,6 +165,7 @@ def customer(customer_id):
                            activePage = 'profile'
                             )
 
+
 @app.route("/get_customer_profile", methods=['GET', 'POST'])
 @auth_required()
 @roles_accepted("Admin", "Cashier")
