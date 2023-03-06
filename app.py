@@ -150,7 +150,7 @@ def customers():
                             )
 
 
-@app.route("/customer/<int:customer_id>")
+@app.route("/customer/<customer_id>")
 @auth_required()
 @roles_accepted("Admin", "Cashier")
 def customer(customer_id):
@@ -175,13 +175,10 @@ def customer_profile():
         customer = db.session.query(Customer).filter(Customer.Id == form.customer_id.data).first()
         accounts = db.session.query(Account).filter(Account.CustomerId == form.customer_id.data).all()
         total_balance = sum([account.Balance for account in accounts])
-        return render_template("customer_profile.html",
-                            customer = customer,
-                            accounts = accounts,
-                            total_balance = total_balance,
-                            redirect = "/customer",
-                            activePage = 'profile'
-                                )
+        return redirect('/customer/'+ str(customer.Id))
+    else:
+        print(form.errors)
+        print('not validate')
     return render_template('search_profile.html', form = form)
 
 

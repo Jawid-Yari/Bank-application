@@ -4,6 +4,7 @@
     
 <div class ="creat-customer">
 <form method="post">
+    {{ form.csrf_token }}
     <div class="customer">
         {{ macros.render_field(form.GivenName, class="form-control select") }}
     </div>
