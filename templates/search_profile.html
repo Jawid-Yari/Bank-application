@@ -4,6 +4,7 @@
     
 <div class ="transaction">
 <form method="post">
+    {{ form.csrf_token }}
     <div class="lable form-group">
         {{ macros.render_field(form.customer_id, class="form-control select") }}
     </div>

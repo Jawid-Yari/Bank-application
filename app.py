@@ -20,8 +20,7 @@ from flask_security import hash_password
 
 
 app = Flask(__name__)
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://nordiscbank:Hejsan123@nordicbank.mysql.database.azure.com/bank'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:hej123@localhost/starbank'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://nordiscbank:Hejsan123@nordicbank.mysql.database.azure.com/bank'
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", 'Kp10kHudawanDa594-2ToBiaEnji-9OnAchoRaNaraFt')
 app.config['SECURITY_PASSWORD_SALT'] = os.environ.get("SECURITY_PASSWORD_SALT", '146585145368132386173505678016728509634')
 app.config["REMEMBER_COOKIE_SAMESITE"] = "strict"
@@ -150,7 +149,7 @@ def customers():
                             )
 
 
-@app.route("/customer/<int:customer_id>")
+@app.route("/customer/<customer_id>")
 @auth_required()
 @roles_accepted("Admin", "Cashier")
 def customer(customer_id):
@@ -175,13 +174,10 @@ def customer_profile():
         customer = db.session.query(Customer).filter(Customer.Id == form.customer_id.data).first()
         accounts = db.session.query(Account).filter(Account.CustomerId == form.customer_id.data).all()
         total_balance = sum([account.Balance for account in accounts])
-        return render_template("customer_profile.html",
-                            customer = customer,
-                            accounts = accounts,
-                            total_balance = total_balance,
-                            redirect = "/customer",
-                            activePage = 'profile'
-                                )
+        return redirect('/customer/'+ str(customer.Id))
+    else:
+        print(form.errors)
+        print('not validate')
     return render_template('search_profile.html', form = form)
 
 
