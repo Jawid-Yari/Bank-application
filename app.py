@@ -306,7 +306,7 @@ def withdraw():
                          account.Id )
         flash('Withdrawal Succesful', category='success')
         form.submit_success = True
-        #return redirect('/withdraw')
+        return redirect('/withdraw')
     return render_template('withdrawal.html',
                             form = form
                         
